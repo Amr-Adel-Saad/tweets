@@ -1,14 +1,14 @@
 import './styles/App.scss';
 
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
 import Index from './components/Index';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Home from './components/Home';
-import Profile from './components/Profile';
+import Profile from './components/Profile/Profile';
 
 import store from './store';
 
@@ -19,10 +19,11 @@ const App = () => {
         <Router>
           <Switch>
             <Route exact path="/" component={Index} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/signup" component={Signup} />
-            <Route exact path="/home" component={Home} />
-            <Route exact path="/profile/:username" component={Profile} />
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={Signup} />
+            <Route path="/home" component={Home} />
+            <Route path="/profile/:username" component={Profile}/>
+            <Route render={() => <h1 style={{ color: 'white' }}>Not found!</h1>} />
           </Switch>
         </Router>
       </div>

@@ -30,10 +30,13 @@ class Home extends Component {
 	
 	render() {
 		return (
-			<div id="Home">
+			<div className="row">
 				<Navigation
-					isLogged={ this.props.user.isLogged } userData={ this.props.user.userData }
-					handleLogout={ this.handleLogout } handleLogin={ this.handleLogin } />
+						isLogged={ this.props.user.isLogged } userData={ this.props.user.userData }
+						handleLogout={ this.handleLogout } handleLogin={ this.handleLogin } />
+				<section id="Home">
+					Home
+				</section>
 			</div>
 		);
 	}

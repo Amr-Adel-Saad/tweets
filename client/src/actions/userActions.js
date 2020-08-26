@@ -1,5 +1,6 @@
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
+import { push } from 'connected-react-router';
 
 import { LOGIN_USER, LOGOUT_USER, GET_USER_DATA } from './types';
 
@@ -34,16 +35,24 @@ export const checkLogin = () => dispatch => {
       Authorization: `Bearer ${localStorage.getItem('userToken')}`
     }})
       .then(res => {
-        dispatch({
-          type: LOGIN_USER
-        });
-        dispatch({
-          type: GET_USER_DATA,
-          payload: res.data
-        });
+        if (res.status === 401) {
+          dispatch(push('/login'));
+          console.log(res.data);
+        } else {
+          dispatch({
+            type: LOGIN_USER
+          });
+          dispatch({
+            type: GET_USER_DATA,
+            payload: res.data
+          });
+        }
       })
       .catch(err => {
+        dispatch(push('/login'));
         console.log(err);
       });
+  } else {
+    dispatch(push('/login'));
   }
 }

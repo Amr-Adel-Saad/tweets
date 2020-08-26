@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Navbar, NavbarBrand, Nav, NavItem, NavLink, Button } from 'reactstrap';
 
+import TweetModal from './TweetModal';
+
 const Navigation = (props) => {
   return (
     <Navbar id="main-navbar">
@@ -19,12 +21,7 @@ const Navigation = (props) => {
         <NavItem>
           <NavLink tag={Link} to={ "/profile/" + props.user.userData.name }><i className="fa fa-fw fa-user"></i><span> Profile</span></NavLink>
         </NavItem>
-        <NavItem>
-          <NavLink id="tweet" tag={Link} to="#" >
-          <i className="fa fa-fw fa-paper-plane"></i>
-            <span> Tweet</span>
-          </NavLink>
-        </NavItem>
+        <TweetModal />
         <section className="user-info">
           <div>
             <img src={props.user.userData.image} alt="profile"/><br/>{props.user.userData.name}

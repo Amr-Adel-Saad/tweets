@@ -1,7 +1,7 @@
 #profile {
+  text-align: center;
   padding: 20px 0;
   margin-left: 23%;
-  color: white;
   width: 45%;
   min-height: 100vh;
   border-right: 1px solid white;
@@ -63,14 +63,20 @@
         .nav-link:hover, .nav-link:active {
           background-color:rgb(21, 48, 71);
           color: dodgerblue;
-          border-bottom: 3px solid dodgerblue;
+          border-bottom: 3px solid $main-blue;
         }
         .selected {
           background-color:rgb(21, 48, 71);
-          color: dodgerblue;
-          border-bottom: 3px solid dodgerblue;
+          color: $main-blue;
+          border-bottom: 3px solid $main-blue;
         }
       }
+    }
+  }
+
+  #profile-tweets {
+    h3 {
+      margin-top: 30px;
     }
   }
 }

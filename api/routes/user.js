@@ -113,14 +113,14 @@ router.post('/login', (req, res) => {
 		.catch(err => res.status(500).json({ error: err }));
 });
 
-// User profile
+// Current profile
 router.get('/:username', (req, res) => {
 	User.findOne({ name: req.params.username }).select('-password').exec()
 		.then(user => res.status(200).json(user))
 		.catch(err => res.status(500).json({ error: err }));
 });
 
-// Current user profile
+// User profile
 router.get('/profile/:username', checkAuth, (req,res) => {
 	if (req.params.username === req.userData.name) {
 		User.findOne({ name: req.params.username }).select('-password').exec()
@@ -140,13 +140,13 @@ router.patch('/:userId', upload.single('userImage'), checkAuth, (req, res) => {
 		if (req.file !== undefined) {
 			User.updateOne(
 				{ _id: req.params.userId }, 
-				{ $addToSet: req.body, image: `/${req.file.path}` }).exec()
+				{ $push: req.body, image: `/${req.file.path}` }).exec()
 				.then(() => res.status(200).json({ message: 'User updated' }))
 				.catch(err => res.status(500).json({ error: err }));
 		} else {
 			User.updateOne(
 				{ _id: req.params.userId }, 
-				{ $addToSet: req.body }).exec()
+				{ $push: req.body }).exec()
 				.then(() => res.status(200).json({ message: 'User updated' }))
 				.catch(err => res.status(500).json({ error: err }));
 		}

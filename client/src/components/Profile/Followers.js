@@ -11,7 +11,7 @@ class Followers extends Component {
   
   render() {
     return (
-      <div style={{ color: "white" }}>
+      <div>
         Followers
       </div>
     );

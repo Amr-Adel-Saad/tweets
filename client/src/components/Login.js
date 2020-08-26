@@ -51,7 +51,7 @@ class Login extends Component {
 			})
 			.catch(err => {
 				console.log(err);
-				if (err.response.status === 401) {
+				if (err.response && err.response.status === 401) {
 					this.setState({ alert: true, flash: false });
 					this.props.history.push('/login');
 					this.setState({ isLoading: false });

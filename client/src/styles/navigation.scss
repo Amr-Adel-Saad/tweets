@@ -1,6 +1,5 @@
 #main-navbar {
   position: fixed;
-  color: white;
   width: 23%;
   height: 100%;
   font-weight: bold;
@@ -35,19 +34,18 @@
       border-radius: 30px;
       &:hover {
         background-color: rgb(21, 48, 71);
-        color: dodgerblue;
+        color: $main-blue;
       }
     }
 
-    #tweet {
+    #tweet-button {
+      font-weight: bold;
+      border-radius: 25px;
       font-size: 20px;
-      background-color: dodgerblue;
-      text-align: center;
-      margin: 40px 10px;
-      padding: 10px;
+      margin: 40px auto;
+      padding: 10px 60px;
       &:hover {
         background-color: rgb(0, 128, 255);
-        color: white;
       }
     }
 
@@ -125,6 +123,76 @@
   
     span, img {
       display: none;
+    }
+  }
+}
+
+.modal {
+  background-color: rgba(213, 234, 255, 0.2);
+  .modal-dialog {
+    max-width: 45vw;
+  }
+  .modal-content {
+    border-radius: 16px;
+    background-color: rgb(21, 32, 43);
+    .modal-header {
+      height: 50px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid gray;
+      .close {
+        padding: 2px 11px 3px 10px;
+        color: $main-blue;
+        font-size: 36px;
+        text-shadow: none;
+        outline: none;
+        border-radius: 60%;
+        margin: 5px auto 5px 0;
+      }
+      .close:hover {
+        background-color: rgb(21, 48, 71);
+      }
+    }
+    .modal-body {
+      height: 260px;
+      display: flex;
+      img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+      }
+      form {
+        width: 90%;
+        display: flex;
+        flex-direction: column;
+
+        .form-group {
+          height: 100%;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+        }
+
+        textarea {
+          font-size: 18px;
+          background-color: rgb(21, 32, 43);
+          color: white;
+          border-radius: 0;
+          border: none;
+          border-bottom: 1px solid gray;
+          box-shadow: none;
+          height: 180px;
+          resize: none;
+        }
+
+        button {
+          font-weight: bold;
+          width: 100px;
+          align-self: flex-end;
+          border-radius: 20px;
+        }
+      }
     }
   }
 }

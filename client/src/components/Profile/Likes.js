@@ -11,7 +11,7 @@ class Likes extends Component {
   
   render() {
     return (
-      <div style={{ color: "white" }}>
+      <div>
         Likes
       </div>
     );

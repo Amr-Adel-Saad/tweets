@@ -23,16 +23,6 @@ class Signup extends Component {
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
-	componentDidMount() {
-		this.props.checkLogin();
-	}
-	
-	componentDidUpdate() {
-		if (this.props.user.isLogged) {
-			this.props.history.push('/home');
-		}
-	}
-
 	handleSubmit(e) {
 		e.preventDefault();
 		this.setState({ isLoading: true });

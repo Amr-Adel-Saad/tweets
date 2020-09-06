@@ -33,6 +33,7 @@ const upload = multer({
 
 const checkAuth = require('../middleware/check-auth');
 const User = require('../models/User');
+const Tweet = require('../models/Tweet');
 
 // User signup
 router.post("/signup", (req, res) => {
@@ -102,7 +103,7 @@ router.post('/login', (req, res) => {
 							, process.env.JWT_KEY,
 							{ expiresIn: '24h' });
 
-						return res.status(200).json({ message: 'Auth successful', token });
+						return res.status(200).json({ message: 'Auth successful', token, user });
 					}
 					return res.status(401).json({ message: 'Auth failed' });
 				});
@@ -113,17 +114,10 @@ router.post('/login', (req, res) => {
 		.catch(err => res.status(500).json({ error: err }));
 });
 
-// Current profile
-router.get('/:username', (req, res) => {
-	User.findOne({ name: req.params.username }).select('-password').exec()
-		.then(user => res.status(200).json(user))
-		.catch(err => res.status(500).json({ error: err }));
-});
-
 // User profile
-router.get('/profile/:username', checkAuth, (req,res) => {
-	if (req.params.username === req.userData.name) {
-		User.findOne({ name: req.params.username }).select('-password').exec()
+router.get('/:userId', checkAuth, (req,res) => {
+	if (req.params.userId === req.userData.userId) {
+		User.findOne({ _id: req.userData.userId }).select('-password').populate('tweets').exec()
 			.then(user => res.status(200).json(user))
 			.catch(err => res.status(500).json({ error: err }));
 	} else {
@@ -134,9 +128,6 @@ router.get('/profile/:username', checkAuth, (req,res) => {
 // User update
 router.patch('/:userId', upload.single('userImage'), checkAuth, (req, res) => {
 	if (req.params.userId === req.userData.userId) {
-		if (req.body.email || req.body.name) {
-			return res.status(409).json({ message: 'You cannot update username or email' });
-		}
 		if (req.file !== undefined) {
 			User.updateOne(
 				{ _id: req.params.userId }, 
@@ -146,7 +137,7 @@ router.patch('/:userId', upload.single('userImage'), checkAuth, (req, res) => {
 		} else {
 			User.updateOne(
 				{ _id: req.params.userId }, 
-				{ $push: req.body }).exec()
+				{ $addToSet: req.body }).exec()
 				.then(() => res.status(200).json({ message: 'User updated' }))
 				.catch(err => res.status(500).json({ error: err }));
 		}
@@ -163,6 +154,36 @@ router.delete('/:userId', checkAuth, (req, res) => {
 			.catch(err => res.status(500).json({ error: err }));
 	} else {
 		res.status(401).json({ message: 'Auth failed' });
+	}
+});
+
+// Current profile
+router.get('/profile/:username', (req, res) => {
+	User.findOne({ name: req.params.username }).select('-password').populate('tweets').exec()
+		.then(profile => {
+			if (profile) {
+				return res.status(200).json(profile);
+			} else {
+				return res.status(404).json({ message: 'Profile not found' });
+			}
+		})
+		.catch(err => res.status(500).json({ error: err }));
+});
+
+// Current profile update
+router.patch('/profile/:username', (req, res) => {
+	if (req.body.type === 'follow') {
+		User.updateOne(
+			{ name: req.params.username }, 
+			{ $addToSet: req.body.follower }).exec()
+			.then(() => res.status(200).json({ message: 'Added follower' }))
+			.catch(err => res.status(500).json({ error: err }));
+	} else if (req.body.type === 'unfollow') {
+		User.updateOne(
+			{ _id: req.params.userId }, 
+			{ $unset: req.body.follower }).exec()
+			.then(() => res.status(200).json({ message: 'Removed follower' }))
+			.catch(err => res.status(500).json({ error: err }));
 	}
 });
 

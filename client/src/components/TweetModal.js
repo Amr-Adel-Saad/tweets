@@ -37,15 +37,13 @@ class TweetModal extends Component {
     e.preventDefault();
 
     const newTweet = {
-      tweets: {
-        content: this.state.tweet,
-        likes: []
-      }
+      content: this.state.tweet,
+      author: this.props.user.userData._id
     }
 
     axios({
-			method: 'patch',
-			url: `/api/user/${this.props.user.userData._id}`,
+			method: 'post',
+			url: `/api/tweet/`,
 			headers: {
 				Authorization: `Bearer ${localStorage.getItem('userToken')}`
 			},

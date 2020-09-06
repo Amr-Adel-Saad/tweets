@@ -17,6 +17,7 @@ app.use('/uploads', express.static('uploads'));
 
 // Routes
 app.use('/api/user', require('./api/routes/user'));
+app.use('/api/tweet', require('./api/routes/tweet'));
 
 // DB config
 const db = process.env.MONGO_URI;

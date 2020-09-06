@@ -1,16 +1,16 @@
 #main-navbar {
   position: fixed;
-  width: 23%;
+  width: 22%;
   height: 100%;
   font-weight: bold;
-  border-right: 1px solid white;
+  border-right: 1px solid rgba(255,255,255,.25);
 
   .navbar-brand {
     height: 50px;
     color: white;
     border-radius: 30px;
     &:hover {
-      background-color: rgb(21, 48, 71);
+      background-color: $hover-blue;
     }
   }
 
@@ -28,12 +28,12 @@
     }
 
     .nav-link {
-      font-size: 22px;
+      font-size: 20px;
       margin: 5px;
       color: white;
       border-radius: 30px;
       &:hover {
-        background-color: rgb(21, 48, 71);
+        background-color: $hover-blue;
         color: $main-blue;
       }
     }
@@ -45,7 +45,7 @@
       margin: 40px auto;
       padding: 10px 60px;
       &:hover {
-        background-color: rgb(0, 128, 255);
+        background-color: $light-hover;
       }
     }
 
@@ -68,7 +68,7 @@
     width: 100%;
     font-weight: bold;
     border-right: none;
-    border-top: 1px solid white;
+    border-top: 1px solid rgba(255,255,255,.25);
 
     .navbar-brand {
       display: none;
@@ -99,7 +99,6 @@
       .user-info {
         text-align: "center";
         margin: 0;
-        margin-left: 20px;
 
         span {
           display: none;
@@ -134,12 +133,12 @@
   }
   .modal-content {
     border-radius: 16px;
-    background-color: rgb(21, 32, 43);
+    background-color: $back-blue;
     .modal-header {
       height: 50px;
       display: flex;
       align-items: center;
-      border-bottom: 1px solid gray;
+      border-bottom: 1px solid rgba(255,255,255,.25);
       .close {
         padding: 2px 11px 3px 10px;
         color: $main-blue;
@@ -150,7 +149,7 @@
         margin: 5px auto 5px 0;
       }
       .close:hover {
-        background-color: rgb(21, 48, 71);
+        background-color: $hover-blue;
       }
     }
     .modal-body {
@@ -176,11 +175,11 @@
 
         textarea {
           font-size: 18px;
-          background-color: rgb(21, 32, 43);
+          background-color: $back-blue;
           color: white;
           border-radius: 0;
           border: none;
-          border-bottom: 1px solid gray;
+          border-bottom: 1px solid rgba(255,255,255,.25);
           box-shadow: none;
           height: 180px;
           resize: none;

@@ -22,10 +22,10 @@ const UserSchema = new Schema({
 		type: String,
 		default: '/uploads/default.png'
 	},
-	tweets: {
-		type: Array,
-		default: []
-	},
+	tweets: [{
+		type: Schema.Types.ObjectId,
+		ref: 'Tweet'
+	}],
 	following: {
 		type: Array,
 		default: []
@@ -34,6 +34,7 @@ const UserSchema = new Schema({
 		type: Array,
 		default: []
 	}
-});
+},
+{ timestamps: true });
 
 module.exports = mongoose.model('User', UserSchema);

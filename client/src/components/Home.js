@@ -14,9 +14,6 @@ class Home extends Component {
 
 	componentDidMount() {
 		this.props.checkLogin();
-		if (this.props.user.isLogged === false) {
-			this.props.history.push('/login');
-		}
 	}
 	
 	handleLogout() {

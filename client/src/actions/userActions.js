@@ -4,12 +4,12 @@ import { push } from 'connected-react-router';
 
 import { LOGIN_USER, LOGOUT_USER, GET_USER_DATA } from './types';
 
-export const loginUser = (name) => dispatch => {
+export const loginUser = (userId) => dispatch => {
   dispatch({
     type: LOGIN_USER
   });
 
-  axios.get(`/api/user/profile/${name}`, { headers: {
+  axios.get(`/api/user/profile/${userId}`, { headers: {
     Authorization: `Bearer ${localStorage.getItem('userToken')}`
   }})
     .then(res => {
@@ -31,7 +31,7 @@ export const logoutUser = () => dispatch => {
 export const checkLogin = () => dispatch => {
   const decoded = jwt.decode(localStorage.getItem('userToken'));
   if (decoded) {
-    axios.get(`/api/user/profile/${decoded.name}`, { headers: {
+    axios.get(`/api/user/${decoded.userId}`, { headers: {
       Authorization: `Bearer ${localStorage.getItem('userToken')}`
     }})
       .then(res => {

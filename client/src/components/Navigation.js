@@ -13,13 +13,13 @@ const Navigation = (props) => {
       </NavbarBrand>
       <Nav>
         <NavItem>
-          <NavLink tag={Link} to="/home"><i className="fa fa-fw fa-home"></i><span> Home</span></NavLink>
+          <NavLink tag={Link} to="/home/"><i className="fa fa-fw fa-home"></i><span> Home</span></NavLink>
         </NavItem>
         <NavItem>
           <NavLink tag={Link} to="#"><i className="fa fa-fw fa-hashtag"></i><span> Explore</span></NavLink>
         </NavItem>
         <NavItem>
-          <NavLink tag={Link} to={ "/profile/" + props.user.userData.name }><i className="fa fa-fw fa-user"></i><span> Profile</span></NavLink>
+          <NavLink tag={Link} to={ `/profile/${props.user.userData.name}/` }><i className="fa fa-fw fa-user"></i><span> Profile</span></NavLink>
         </NavItem>
         <TweetModal />
         <section className="user-info">

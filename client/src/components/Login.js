@@ -28,12 +28,12 @@ class Login extends Component {
 		this.props.checkLogin();
 	}
 
-	componentDidUpdate() {
-		if (this.props.user.isLogged) {
-			this.props.history.push('/home');
+	static getDerivedStateFromProps(props, state) {
+		if (props.user.isLogged) {
+			props.history.push('/home');
 		}
 	}
-
+	
 	handleSubmit(e) {
 		e.preventDefault();
 		this.setState({ isLoading: true });
@@ -69,27 +69,29 @@ class Login extends Component {
 	render() {
 		return (
 			<div className="credentials">
-				<Form className="container" onSubmit={this.handleSubmit} >
+				<div className="form-container">
 					<h1><i className="fa fa-twitter"></i> tweets</h1>
-					<Alert color="success" isOpen={this.state.flash} >
-						<i className="fa fa-lg fa-check-circle"></i> Registered, Please log in!
-					</Alert>
-					<FormGroup>
-						<Input type="text" id="name" name="name" onChange={this.handleChange} value={this.state.name} placeholder="Username" autoFocus/>
-					</FormGroup>
-					<FormGroup>
-						<Input type="password" id="password" name="password" onChange={this.handleChange} value={this.state.password} placeholder="Password" />
-					</FormGroup>
-					<Button color="primary" size="md" >
-						{(this.state.isLoading) ?
-							<Spinner color="light" style={{ height: "20px", width: "20px" }} />
-							: <span>Log in</span>}
-					</Button>
-					<Alert color="warning" isOpen={this.state.alert} >
-						Wrong username or password!
-      		</Alert>
+					<Form onSubmit={this.handleSubmit} noValidate >
+						<Alert color="danger" isOpen={this.state.alert} >
+							Wrong username or password!
+						</Alert>
+						<Alert color="success" isOpen={this.state.flash} >
+							<i className="fa fa-lg fa-check-circle"></i> Registered, Please log in!
+						</Alert>
+						<FormGroup>
+							<Input type="text" id="name" name="name" onChange={this.handleChange} value={this.state.name} placeholder="Username" autoFocus/>
+						</FormGroup>
+						<FormGroup>
+							<Input type="password" id="password" name="password" onChange={this.handleChange} value={this.state.password} placeholder="Password" />
+						</FormGroup>
+						<Button color="primary" size="md" >
+							{(this.state.isLoading) ?
+								<Spinner color="light" style={{ height: "20px", width: "20px" }} />
+								: <span>Log in</span>}
+						</Button>
+					</Form>
 					<p>Don't have an account? <Link to="/signup">Sign up</Link></p>
-				</Form>
+				</div>
 			</div>
 		);
 	}

@@ -17,7 +17,8 @@ class Profile extends Component {
   constructor(props) {
 		super(props);
 		this.state = {
-			currentProfile: ''
+			currentProfile: '',
+			following: 'Follow'
 		};
 		this.handleLogin = this.handleLogin.bind(this);
 		this.handleLogout = this.handleLogout.bind(this);
@@ -36,14 +37,22 @@ class Profile extends Component {
 			.catch(err => console.log(err));
 	}
 
+	static getDerivedStateFromProps(props, state) {
+		if (props.user.userData.following && props.user.userData.following.includes(state.currentProfile.name)) {
+			return { ...state, following: 'Followed' };
+		} else {
+			return null;
+		}
+	}
+
 	componentDidUpdate = (prevProps) => {
-    if(this.props.match.params.username !== prevProps.match.params.username ) {
+    if (this.props.match.params.username !== prevProps.match.params.username ) {
       axios.get(`/api/user/profile/${this.props.match.params.username}`)
 			.then(res => {
 					this.setState({ currentProfile: res.data });
 			})
 			.catch(err => console.log(err));
-   };
+		}
   };
 
   handleLogout() {
@@ -76,49 +85,55 @@ class Profile extends Component {
 			.then(res => {
 					window.location.reload();
 				})
-			.catch(err => { console.log(err); });
+			.catch(err => console.log(err));
 	}
 
 	handleFollow(e) {
 		if (e.target.value === 'follow') {
 			axios({
 				method: 'patch',
-				url: `/api/user/profile/${this.props.currentProfile.name}`,
+				url: `/api/user/profile/${this.state.currentProfile.name}`,
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem('userToken')}`
+				},
 				data: {
-					followers: this.props.user.userData.name
+					type: 'follow'
 				}
 			})
 				.then(res => {
-						window.location.reload();
+						this.setState({ following: 'Followed' });
 					})
-				.catch(err => { console.log(err); });
+				.catch(err => console.log(err));
 		} else {
 			axios({
-				method: 'delete',
-				url: `/api/user/profile/${this.props.currentProfile.name}`,
+				method: 'patch',
+				url: `/api/user/profile/${this.state.currentProfile.name}`,
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem('userToken')}`
+				},
 				data: {
-					followers: this.props.user.userData.name
+					type: 'unfollow',
 				}
 			})
 				.then(res => {
-						window.location.reload();
+					this.setState({ following: 'Follow' });
 					})
-				.catch(err => { console.log(err); });
+				.catch(err => console.log(err));
 		}
 	}
 
   render() {
     return (
       <div className="row">
-        <Navigation
+        <Navigation className="col-2"
           isLogged={ this.props.user.isLogged } userData={ this.props.user.userData }
           handleLogout={ this.handleLogout } handleLogin={ this.handleLogin } />
-				<section id="profile">
+				<section id="profile" className="col-6">
 				{
 					(this.state.currentProfile === '')
 					?	<h2>Oops! Couldn't find username "{this.props.match.params.username}"</h2>
 					:
-					<>	
+					<>
 						<div id="img-container">
 							<img src={ 'http://localhost:5000' + this.state.currentProfile.image } alt="profile"/>
 							<p>{this.state.currentProfile.name}</p>
@@ -130,9 +145,20 @@ class Profile extends Component {
 														<Input type="file" id="userImage" title="x" name="userImage" onChange={this.handleChange} />
 														</FormGroup>
 													</Form>
+								} else if (this.state.following === 'Followed') {
+									return	<Button onMouseOver={() => {
+															document.getElementById('follow').innerHTML='Unfollow'
+															document.getElementById('follow').className='unfollow btn-lg'
+														}}
+														onMouseOut={() => {
+															document.getElementById('follow').innerHTML='Followed'
+															document.getElementById('follow').className='followed btn-lg'
+														}}
+															value="unfollow" onClick={this.handleFollow} id="follow" className="followed btn-lg">
+														{this.state.following}</Button>
 								} else {
-									return <Button onClick={this.handleFollow} className="follow btn-lg">
-														Follow</Button>
+									return <Button value="follow" onClick={this.handleFollow} className="follow btn-lg">
+														{this.state.following}</Button>
 								}
 							})()
 							}
@@ -157,6 +183,7 @@ class Profile extends Component {
       		</>
 				}
 				</section>
+				<div className="col-3">Trending</div>
 			</div>
     );
   }

@@ -58,32 +58,34 @@ class Signup extends Component {
 	render() {
 		return (
 			<div className="credentials">
-				<Form className="container" onSubmit={this.handleSubmit}>
+				<div className="form-container">
 					<h1><i className="fa fa-twitter"></i> tweets</h1>
-					<FormGroup>
-						<Input type="text" id="username" name="name" onChange={this.handleChange} value={this.state.name} placeholder="Username" autoFocus/>
-					</FormGroup>
-					<FormGroup>
-						<Input type="email" id="email" name="email" onChange={this.handleChange} value={this.state.email} placeholder="Email" />
-					</FormGroup>
-					<FormGroup>
-						<Input type="password" id="password" name="password" onChange={this.handleChange} value={this.state.password} placeholder="Password" />
-					</FormGroup>
-					<FormGroup>
-						<Input type="password" id="password2" name="password2" onChange={this.handleChange} value={this.state.password2} placeholder="Confirm Password" />
-					</FormGroup>
-					<Button color="primary" size="md">
-						{(this.state.isLoading) ?
-							<Spinner color="light" style={{ height: "20px", width: "20px" }} />
-							: <span>Sign up</span>}
-					</Button>
-					{this.state.errors.map((error, i) =>
-						<Alert className="warning" key={i} isOpen={this.state.alert} color="warning">
-							{error + '!'}
-						</Alert>)
-					}
+					<Form onSubmit={this.handleSubmit} noValidate >
+						{this.state.errors.map((error, i) =>
+							<Alert key={i} isOpen={this.state.alert} color="danger">
+								{error + '!'}
+							</Alert>)
+						}
+						<FormGroup>
+							<Input type="text" id="username" name="name" onChange={this.handleChange} value={this.state.name} placeholder="Username" autoFocus/>
+						</FormGroup>
+						<FormGroup>
+							<Input type="email" id="email" name="email" onChange={this.handleChange} value={this.state.email} placeholder="Email" />
+						</FormGroup>
+						<FormGroup>
+							<Input type="password" id="password" name="password" onChange={this.handleChange} value={this.state.password} placeholder="Password" />
+						</FormGroup>
+						<FormGroup>
+							<Input type="password" id="password2" name="password2" onChange={this.handleChange} value={this.state.password2} placeholder="Confirm Password" />
+						</FormGroup>
+						<Button color="primary" size="md">
+							{(this.state.isLoading) ?
+								<Spinner color="light" style={{ height: "20px", width: "20px" }} />
+								: <span>Sign up</span>}
+						</Button>
+					</Form>
 					<p>Have an account? <Link to="/login">Log in</Link></p>
-				</Form>
+					</div>
 			</div>
 		);
 	}

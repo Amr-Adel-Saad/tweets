@@ -11,7 +11,7 @@ const Tweets = (props) => {
           ? <h3>No tweets yet!</h3>
           : props.currentProfile.tweets.map((tweet, i) => {
             return (
-              <div className="tweet" key={i}>
+              <div className="tweet-container" key={i}>
                 <img src={props.currentProfile.image} alt="current-profile"/>
                 <div className="tweet-main">
                   <span>{props.currentProfile.name}</span>

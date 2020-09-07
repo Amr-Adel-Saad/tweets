@@ -2,6 +2,7 @@ $main-blue: rgb(29, 161, 242);
 $back-blue: rgb(21, 32, 43);
 $hover-blue: rgb(21, 48, 71);
 $light-hover: rgb(0, 128, 255);
+$heart: #E74C3C;
 
 @import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
@@ -31,7 +32,7 @@ body {
 }
 
 a, button {
-  transition: background-color 0.2s, color 0.2s;
+  transition: background-color 0.2s, color 0.2s, border 0.2s;
 }
 
 #notfound {

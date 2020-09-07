@@ -171,18 +171,26 @@ router.get('/profile/:username', (req, res) => {
 });
 
 // Current profile update
-router.patch('/profile/:username', (req, res) => {
+router.patch('/profile/:username', checkAuth, (req, res) => {
 	if (req.body.type === 'follow') {
 		User.updateOne(
 			{ name: req.params.username }, 
-			{ $addToSet: req.body.follower }).exec()
-			.then(() => res.status(200).json({ message: 'Added follower' }))
+			{ $addToSet: { followers: req.userData.name } }).exec()
+			.then(() => User.updateOne(
+				{ _id: req.userData.userId }, 
+				{ $addToSet: { following: req.params.username } }).exec()
+				.then(() => res.status(200).json({ message: 'Added follow' }))
+				.catch(err => res.status(500).json({ error: err })))
 			.catch(err => res.status(500).json({ error: err }));
 	} else if (req.body.type === 'unfollow') {
 		User.updateOne(
-			{ _id: req.params.userId }, 
-			{ $unset: req.body.follower }).exec()
-			.then(() => res.status(200).json({ message: 'Removed follower' }))
+			{ name: req.params.username }, 
+			{ $pull: { followers: req.userData.name } }).exec()
+			.then(() => User.updateOne(
+				{ _id: req.userData.userId }, 
+				{ $pull: { following: req.params.username } }).exec()
+				.then(() => res.status(200).json({ message: 'Removed follow' }))
+				.catch(err => res.status(500).json({ error: err })))
 			.catch(err => res.status(500).json({ error: err }));
 	}
 });

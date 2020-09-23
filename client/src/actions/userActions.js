@@ -2,7 +2,7 @@ import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import { push } from 'connected-react-router';
 
-import { LOGIN_USER, LOGOUT_USER, GET_USER_DATA } from './types';
+import { LOGIN_USER, LOGOUT_USER, GET_USER, UPDATE_USER_TWEETS, UPDATE_USER_IMAGE } from './types';
 
 export const loginUser = (userId) => dispatch => {
   dispatch({
@@ -14,7 +14,7 @@ export const loginUser = (userId) => dispatch => {
   }})
     .then(res => {
       dispatch({
-        type: GET_USER_DATA,
+        type: GET_USER,
         payload: res.data
       });
     })
@@ -37,13 +37,12 @@ export const checkLogin = () => dispatch => {
       .then(res => {
         if (res.status === 401) {
           dispatch(push('/login'));
-          console.log(res.data);
         } else {
           dispatch({
             type: LOGIN_USER
           });
           dispatch({
-            type: GET_USER_DATA,
+            type: GET_USER,
             payload: res.data
           });
         }
@@ -55,4 +54,18 @@ export const checkLogin = () => dispatch => {
   } else {
     dispatch(push('/login'));
   }
+}
+
+export const updateUserTweets = (tweet) => (dispatch) => {
+  dispatch({
+    type: UPDATE_USER_TWEETS,
+    payload: tweet
+  });
+}
+
+export const updateUserImage = (image) => (dispatch) => {
+  dispatch({
+    type: UPDATE_USER_IMAGE,
+    payload: image
+  });
 }

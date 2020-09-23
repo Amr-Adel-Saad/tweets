@@ -4,8 +4,7 @@ import { Form, Alert, FormGroup, Input, Button, Spinner } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-import { loginUser } from '../actions/userActions';
-import { checkLogin } from '../actions/userActions';
+import { loginUser, checkLogin } from '../actions/userActions';
 
 class Login extends Component {
 	constructor(props) {
@@ -31,6 +30,9 @@ class Login extends Component {
 	static getDerivedStateFromProps(props, state) {
 		if (props.user.isLogged) {
 			props.history.push('/home');
+			return null;
+		} else {
+			return null;
 		}
 	}
 	

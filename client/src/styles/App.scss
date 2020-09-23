@@ -9,9 +9,14 @@ $heart: #E74C3C;
 @import 'credentials';
 @import 'navigation';
 @import 'profile';
+@import 'home';
 
 html {
   overflow-y: scroll;
+}
+
+.col-5-5 {
+  width: 47%;
 }
 
 body {
@@ -27,12 +32,160 @@ body {
   color: rgb(150, 150, 150) !important;
 }
 
-.btn:focus {
-  box-shadow: none;
+.btn {
+  box-shadow: none !important;
 }
 
 a, button {
   transition: background-color 0.2s, color 0.2s, border 0.2s;
+}
+
+.tweet-container {
+  width: 100%;
+  position: relative;
+  text-align: left;
+  display: flex;
+  border-bottom: 1px solid rgba(255,255,255,.25);
+  transition: background-color 0.2s, color 0.2s;
+  padding: 8px;
+  justify-content: space-around;
+
+  img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+
+  .tweet-main {
+    width: 85%;
+
+    span {
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
+
+  .tweet-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    p {
+      margin-top: 1%;
+      margin-bottom: 0;
+      word-break: break-all;
+    }
+
+    div {
+      z-index: 2;
+      align-self: flex-end;
+      background-color: transparent !important;
+
+      .btn {
+        box-shadow: none;
+        margin: 0 3px;
+        padding: 0;
+        background-color: transparent;
+        border: none;
+      }
+
+      .liked {
+        color: $heart;
+        background-color: transparent !important;
+        box-shadow: none !important;
+      }
+      
+      .liked:hover {
+        color: darkgray;
+      }
+      
+      .like {
+        color: darkgray;
+        background-color: transparent !important;
+        box-shadow: none !important;
+      }
+      
+      .like:hover {
+        color: $heart;
+      }
+
+      p {
+        display: inline-block;
+        font-size: 14px;
+        color: darkgray;
+        margin: 0 5px;
+      }
+    }
+  }
+
+  a {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    text-decoration: none; /* No underlines on the link */
+    z-index: 1; /* Places the link above everything else in the div */
+    background-color: #FFF; /* Fix to make div clickable in IE */
+    opacity: 0; /* Fix to make div clickable in IE */
+    filter: alpha(opacity=1); /* Fix to make div clickable in IE */
+  }
+}
+
+.tweet-container:hover {
+  background-color: rgba(21, 48, 71, 0.4);
+}
+
+.back-button-div {
+  width: 100%;
+  position: sticky;
+  background-color: $back-blue;
+  z-index: 2;
+  top: 0;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,.25);
+
+  .back-button {
+    background-color: transparent;
+    padding: 7px 12px;
+    margin-left: 2%;
+    border: none;
+    color: $main-blue !important;
+    background-color: transparent !important;
+    text-shadow: none;
+    outline: none;
+    border-radius: 60%;
+  }
+  
+  .back-button:hover {
+    background-color: $hover-blue !important;
+  }
+
+  div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 4%;
+
+    h2 {
+      font-size: 18px;
+      font-weight: bolder;
+      margin: 0;
+    }
+
+    span {
+      font-size: 13px;
+      color: darkgray;
+    }
+  }
+}
+
+#delete-tweet {
+  position: absolute;
+  top: 10%;
+  right: 2%;
 }
 
 #notfound {

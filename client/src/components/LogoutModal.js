@@ -3,17 +3,14 @@ import {
   Button,
   Modal,
   ModalHeader,
-  ModalBody,
-  Form,
-  FormGroup,
-  Input
+  ModalBody
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
 import { updateUserTweets } from '../actions/userActions';
 
-class TweetModal extends Component {
+class LogoutModal extends Component {
   constructor(props) {
     super();
     this.state = {
@@ -61,9 +58,9 @@ class TweetModal extends Component {
   render() {
     return (
       <div style={{ textAlign: "center" }}>
-        <Button color="primary" id="tweet-button" onClick={this.toggle}>
-          <i className="fas fa-feather-alt"></i>
-          <span> Tweet</span>
+        <Button style={{ margin: "15px auto" }} color="primary" onClick={this.toggle}>
+          <i className="fa fa-fw fa-sign-out"></i>
+          <span> Log out</span>
         </Button>
 
         <Modal
@@ -71,26 +68,19 @@ class TweetModal extends Component {
           toggle={this.props.toggle}
           autoFocus={false}
         >
-          <ModalHeader toggle={this.toggle}></ModalHeader>
-          <ModalBody>
-            <div>
-              <img src={this.props.user.userData.image} alt="profile"/>
+          <ModalHeader style={{ display: "none" }}></ModalHeader>
+          <ModalBody style={{ display: "flex", 
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "space-around"
+            }}>
+            <h2 style={{ margin: "3% auto" }}>Log out of Tweets ?</h2>
+            <div style={{ width: "100%", textAlign: "center" }}>
+              <Button onClick={this.toggle} style={{ margin: "3%" }}>Cancel</Button>
+              <Button onClick={this.props.handleLogout} style={{ margin: "3%" }} color="primary" 
+                autoFocus={true}>Log out
+              </Button>
             </div>
-            <Form onSubmit={e => this.handleTweet(this.state.tweet, e)}>
-              <FormGroup>
-                <Input
-                  maxLength="280"
-                  type="textarea"
-                  name="tweet"
-                  placeholder="What's happening ?"
-                  onChange={this.handleChange}
-                  autoFocus={true}
-                />
-                <Button disabled={this.state.tweet.length < 1} color="primary">
-                  Tweet
-                </Button>
-              </FormGroup>
-            </Form>
           </ModalBody>
         </Modal>
       </div>
@@ -102,4 +92,4 @@ const mapStateToProps = state => ({
   user: state.user
 });
 
-export default connect(mapStateToProps, { updateUserTweets })(TweetModal);
+export default connect(mapStateToProps, { updateUserTweets })(LogoutModal);

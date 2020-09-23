@@ -1,16 +1,34 @@
-import React from 'react';
-import { Redirect } from 'react-router-dom';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Spinner } from 'reactstrap';
 
-function Index(props) {
-  if (props.user.isLogged) {
+import { checkLogin } from '../actions/userActions';
+
+class Index extends Component {
+  componentDidMount() {
+    this.props.checkLogin();
+  }
+  
+  componentDidUpdate() {
+    if (this.props.user.isLogged) {
+      this.props.history.push('/home');
+    } else {
+      this.props.history.push('/login');
+    }
+  }
+  
+  render() {
     return (
-      <Redirect to='/home' />
-    )
-  } else {
-    return (
-      <Redirect to='/login' />
-    )
+      <Spinner color="primary"
+          style={{
+            position: "absolute",
+            top: "50%",
+            bottom: "50%",
+            right: "50%",
+            left: "50%"
+          }}
+        />
+    );
   }
 }
 
@@ -18,4 +36,4 @@ const mapStateToProps = state => ({
   user: state.user
 });
 
-export default connect(mapStateToProps)(Index);
+export default connect(mapStateToProps, { checkLogin })(Index);

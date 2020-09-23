@@ -2,7 +2,9 @@ require('dotenv').config({path: __dirname + '/.env'});
 
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose').set('useCreateIndex', true);
+const mongoose = require('mongoose');
+mongoose.set('useCreateIndex', true);
+mongoose.set('useFindAndModify', false);
 
 const app = express();
 

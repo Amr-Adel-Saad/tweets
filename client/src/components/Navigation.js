@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Navbar, NavbarBrand, Nav, NavItem, NavLink, Button } from 'reactstrap';
+import { Navbar, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
 
 import TweetModal from './TweetModal';
+import LogoutModal from './LogoutModal';
 
 const Navigation = (props) => {
   return (
@@ -16,19 +17,26 @@ const Navigation = (props) => {
           <NavLink tag={Link} to="/home/"><i className="fa fa-fw fa-home"></i><span> Home</span></NavLink>
         </NavItem>
         <NavItem>
-          <NavLink tag={Link} to="#"><i className="fa fa-fw fa-hashtag"></i><span> Explore</span></NavLink>
+          <NavLink tag={Link} to="#"><i className="fa fa-fw fa-hashtag"></i><span> Trending</span></NavLink>
         </NavItem>
         <NavItem>
-          <NavLink tag={Link} to={ `/profile/${props.user.userData.name}/` }><i className="fa fa-fw fa-user"></i><span> Profile</span></NavLink>
+          <NavLink tag={Link} to={ `/profile/${props.user.userData.name}/` }>
+            <i className="fa fa-fw fa-user"></i>
+            <span> Profile</span>
+          </NavLink>
         </NavItem>
         <TweetModal />
         <section className="user-info">
-          <div>
-            <img src={props.user.userData.image} alt="profile"/><br/>{props.user.userData.name}
-          </div>
-          <Button style={{ margin: "15px auto" }} color="primary" onClick={props.handleLogout}>
-            <i className="fa fa-fw fa-sign-out"></i><span> Log out</span>
-          </Button>
+          {
+            (props.user.userData)
+              ? <div>
+                  <img src={props.user.userData.image} alt="profile"/><br/>{props.user.userData.name}
+                </div>
+              : <div>
+                  <img src="/uploads/default.png" alt="profile"/><br/><br/>
+                </div>
+          }
+          <LogoutModal handleLogout={props.handleLogout} />
         </section>
       </Nav>
     </Navbar>

@@ -1,4 +1,4 @@
-import { LOGIN_USER, LOGOUT_USER, GET_USER_DATA } from '../actions/types';
+import { LOGIN_USER, LOGOUT_USER, GET_USER, UPDATE_USER_TWEETS, UPDATE_USER_IMAGE } from '../actions/types';
 
 const initialState = {
   isLogged: false,
@@ -12,7 +12,7 @@ export default function(state = initialState, action) {
         ...state,
         isLogged: true
       };
-    case GET_USER_DATA:
+    case GET_USER:
       return {
         ...state,
         userData: action.payload
@@ -23,6 +23,22 @@ export default function(state = initialState, action) {
         isLogged: false,
         userData: ''
       };
+    case UPDATE_USER_TWEETS:
+      return {
+        ...state,
+        userData: {
+          ...state.userData,
+          tweets: [action.payload, ...state.userData.tweets]
+        }
+      };
+    case UPDATE_USER_IMAGE:
+      return {
+        ...state,
+        userData: {
+          ...state.userData,
+          image: action.payload
+        }
+      }
     default:
       return state;
   }

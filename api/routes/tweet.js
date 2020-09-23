@@ -19,8 +19,11 @@ router.post('/', checkAuth, (req, res) => {
       .then(saved => {
         User.updateOne(
           { _id: author }, 
-          { $push: { tweets: saved._id } }).exec()
-          .then(() => res.status(200).json({ message: 'Tweet saved' }))
+          { $push: { tweets: { 
+            $each: [saved._id],
+            $position: 0
+          } } }).exec()
+          .then(() => res.status(200).json({ message: 'Tweet saved', tweet: saved }))
           .catch(err => res.status(500).json({ error: err }));
         })
       .catch(err => res.status(500).json({ error: err }));
@@ -31,7 +34,7 @@ router.post('/', checkAuth, (req, res) => {
 
 // Get tweet
 router.get('/:tweetId', (req, res) => {
-  Tweet.findOne({ _id: req.params.tweetId }).exec()
+  Tweet.findOne({ _id: req.params.tweetId }).populate('author', 'name image').exec()
     .then(tweet => {
       if (tweet) {
         return res.status(200).json(tweet);
@@ -58,19 +61,28 @@ router.get('/trending', (req, res) => {
 });
 
 // Patch tweet
-router.patch('/:tweetId', (req, res) => {
+router.patch('/:tweetId', checkAuth ,(req, res) => {
   if (req.body.type === 'like') {
     Tweet.updateOne(
       { _id: req.params.tweetId },
-      { "$addToSet": { "likers": req.body.id },
+      { "$addToSet": { "likers": req.body.userId },
         "$inc": { "likes": 1 } }).exec()
       .then(tweet => res.status(200).json(tweet))
       .catch(err => res.status(500).json({ error: err }));
-  } else if (req.body.type === 'unlike') {
+  } else if (req.body.type === 'dislike') {
     Tweet.updateOne(
       { _id: req.params.tweetId },
-      { "$pull": { "likers": req.body.id },
+      { "$pull": { "likers": req.body.userId },
         "$inc": { "likes": -1 } }).exec()
+      .then(tweet => res.status(200).json(tweet))
+      .catch(err => res.status(500).json({ error: err }));
+  } else if (req.body.type === 'reply') {
+    Tweet.updateOne(
+      { _id: req.params.tweetId },
+      { "$push": { "replies": { 
+        name: req.body.name,
+        content: req.body.content
+       } } }).exec()
       .then(tweet => res.status(200).json(tweet))
       .catch(err => res.status(500).json({ error: err }));
   } else {

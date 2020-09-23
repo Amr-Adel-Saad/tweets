@@ -10,6 +10,7 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Home from './components/Home';
 import Profile from './components/Profile/Profile';
+import Tweet from './components/Profile/Tweet';
 
 import store, { history } from './store';
 
@@ -23,7 +24,8 @@ const App = () => {
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
             <Route path="/home" component={Home} />
-            <Route path="/profile/:username" component={Profile}/>
+            <Route path="/profile/:username/status/:tweetId" component={Tweet} />
+            <Route path="/profile/:username" component={Profile} />
             <Route render={() => 
               <div id="notfound">
                 <h1>404 Not found!</h1>

@@ -8,8 +8,10 @@ import { checkLogin } from '../actions/userActions';
 class Home extends Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+      userImage: ''
+    }
 		this.handleLogout = this.handleLogout.bind(this);
-		this.handleLogin = this.handleLogin.bind(this);
 	}
 
 	componentDidMount() {
@@ -20,20 +22,17 @@ class Home extends Component {
 		this.props.logoutUser();
 		this.props.history.push('/login');
 	}
-
-	handleLogin() {
-		this.props.history.push('/login');
-	}
 	
 	render() {
 		return (
 			<div className="row">
 				<Navigation
-						isLogged={ this.props.user.isLogged } userData={ this.props.user.userData }
-						handleLogout={ this.handleLogout } handleLogin={ this.handleLogin } />
-				<section id="Home">
-					Home
-				</section>
+          isLogged={ this.props.user.isLogged } userData={ this.props.user.userData }
+					handleLogout={ this.handleLogout } userImage= { this.props.user.userImage } />
+				<main id="home" className="col-5-5">
+					<div>Home</div>
+				</main>
+				<div className="col-3">Most liked</div>
 			</div>
 		);
 	}

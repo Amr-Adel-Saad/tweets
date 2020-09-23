@@ -14,6 +14,10 @@ const TweetSchema = new Schema({
     type: Number,
     default: 0
   },
+  replies: {
+    type: Array,
+    default: []
+  },
   date: {
     type: Object,
     default: new Date()

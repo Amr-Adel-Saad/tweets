@@ -129,16 +129,16 @@ router.get('/:userId', checkAuth, (req,res) => {
 router.patch('/:userId', upload.single('userImage'), checkAuth, (req, res) => {
 	if (req.params.userId === req.userData.userId) {
 		if (req.file !== undefined) {
-			User.updateOne(
+			User.findOneAndUpdate(
 				{ _id: req.params.userId }, 
-				{ $push: req.body, image: `/${req.file.path}` }).exec()
-				.then(() => res.status(200).json({ message: 'User updated' }))
+				{ $push: req.body, image: `/${req.file.path}` }, { new: true }).exec()
+				.then(updated => res.status(200).json(updated))
 				.catch(err => res.status(500).json({ error: err }));
 		} else {
-			User.updateOne(
+			User.findOneAndUpdate(
 				{ _id: req.params.userId }, 
-				{ $addToSet: req.body }).exec()
-				.then(() => res.status(200).json({ message: 'User updated' }))
+				{ $addToSet: req.body }, { new: true }).exec()
+				.then(updated => res.status(200).json(updated))
 				.catch(err => res.status(500).json({ error: err }));
 		}
 	} else {

@@ -3,8 +3,12 @@ require('dotenv').config({path: __dirname + '/.env'});
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-mongoose.set('useCreateIndex', true);
+
+// mongoose fix deprecation warnings
+mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.set('useUnifiedTopology', true);
 
 const app = express();
 
@@ -25,7 +29,7 @@ app.use('/api/tweet', require('./api/routes/tweet'));
 const db = process.env.MONGO_URI;
 
 // Connect to database
-mongoose.connect(db, { useNewUrlParser: true , useUnifiedTopology: true})
+mongoose.connect(db)
     .then(() => console.log('MongoDB Connected...'))
     .catch(err => console.log(err));
 

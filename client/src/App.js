@@ -10,7 +10,7 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Home from './components/Home';
 import Profile from './components/Profile/Profile';
-import Tweet from './components/Profile/Tweet';
+import Tweet from './components/Tweet';
 
 import store, { history } from './store';
 

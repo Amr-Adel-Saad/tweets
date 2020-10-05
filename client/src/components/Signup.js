@@ -9,7 +9,7 @@ import { checkLogin } from '../actions/userActions';
 
 class Signup extends Component {
 	constructor(props) {
-		super(props);
+		super();
 		this.state = {
 			name: '',
 			email: '',
@@ -25,9 +25,11 @@ class Signup extends Component {
 
 	handleSubmit(e) {
 		e.preventDefault();
+
 		this.setState({ isLoading: true });
 		let { name, email, password, password2 } = this.state;
 		name = name.toLowerCase();
+
 		axios({
 			method: "post",
 			url: "/api/user/signup",
@@ -38,26 +40,28 @@ class Signup extends Component {
 			})
 			.catch(err => {
 				let errors = [];
+
 				if (err.response.status === 400) {
 					errors = err.response.data.message;
 				} else if (err.response.status === 409) {
 					errors = [err.response.data.message];
 				}
+
 				this.setState({ alert: true, errors, isLoading: false });
-				this.props.history.push('/signup');
 			});
 	}
 
 	handleChange(e) {
-		let targetName = e.target.getAttribute('name');
-		let newState = {};
+		// Get form data and change state
+		const targetName = e.target.getAttribute('name');
+		const newState = {};
 		newState[targetName] = e.target.value;
 		this.setState(newState);
 	}
 
 	render() {
 		return (
-			<div className="credentials">
+			<main className="credentials">
 				<div className="form-container">
 					<h1><i className="fa fa-twitter"></i> tweets</h1>
 					<Form onSubmit={this.handleSubmit} noValidate >
@@ -67,26 +71,30 @@ class Signup extends Component {
 							</Alert>)
 						}
 						<FormGroup>
-							<Input type="text" id="username" name="name" onChange={this.handleChange} value={this.state.name} placeholder="Username" autoFocus/>
+							<Input type="text" name="name" onChange={this.handleChange} 
+								value={this.state.name} placeholder="Username" autoFocus />
 						</FormGroup>
 						<FormGroup>
-							<Input type="email" id="email" name="email" onChange={this.handleChange} value={this.state.email} placeholder="Email" />
+							<Input type="email" name="email" onChange={this.handleChange} 
+								value={this.state.email} placeholder="Email" />
 						</FormGroup>
 						<FormGroup>
-							<Input type="password" id="password" name="password" onChange={this.handleChange} value={this.state.password} placeholder="Password" />
+							<Input type="password" name="password" onChange={this.handleChange} 
+								value={this.state.password} placeholder="Password" />
 						</FormGroup>
 						<FormGroup>
-							<Input type="password" id="password2" name="password2" onChange={this.handleChange} value={this.state.password2} placeholder="Confirm Password" />
+							<Input type="password" name="password2" onChange={this.handleChange} 
+								value={this.state.password2} placeholder="Confirm Password" />
 						</FormGroup>
 						<Button color="primary" size="md">
 							{(this.state.isLoading) ?
-								<Spinner color="light" style={{ height: "20px", width: "20px" }} />
+								<Spinner color="light" />
 								: <span>Sign up</span>}
 						</Button>
 					</Form>
 					<p>Have an account? <Link to="/login">Log in</Link></p>
 					</div>
-			</div>
+			</main>
 		);
 	}
 }

@@ -8,21 +8,25 @@ import LogoutModal from './LogoutModal';
 
 const Navigation = (props) => {
   return (
-    <Navbar id="main-navbar">
+    <Navbar className="col-2-5" id="main-navbar">
       <NavbarBrand tag={Link} to="/home">
         <i className="fa fa-fw fa-2x fa-twitter"></i>
       </NavbarBrand>
       <Nav>
         <NavItem>
-          <NavLink tag={Link} to="/home/"><i className="fa fa-fw fa-home"></i><span> Home</span></NavLink>
+          <NavLink tag={Link} to="/home/"><i className="fa fa-fw fa-home"></i>
+            <span>&ensp;Home</span>
+          </NavLink>
         </NavItem>
         <NavItem>
-          <NavLink tag={Link} to="#"><i className="fa fa-fw fa-hashtag"></i><span> Trending</span></NavLink>
+          <NavLink tag={Link} to="#"><i className="fa fa-fw fa-hashtag"></i>
+            <span>&ensp;Trending</span>
+          </NavLink>
         </NavItem>
         <NavItem>
           <NavLink tag={Link} to={ `/profile/${props.user.userData.name}/` }>
             <i className="fa fa-fw fa-user"></i>
-            <span> Profile</span>
+            <span>&ensp;Profile</span>
           </NavLink>
         </NavItem>
         <TweetModal />

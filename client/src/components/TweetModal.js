@@ -25,13 +25,8 @@ class TweetModal extends Component {
     this.handleTweet = this.handleTweet.bind(this);
   }
 
-  handleTweet (tweet, e) {
+  handleTweet (e) {
 		e.preventDefault();
-
-    const newTweet = {
-      content: tweet,
-      author: this.props.user.userData._id
-    }
 
     axios({
 			method: 'post',
@@ -39,13 +34,15 @@ class TweetModal extends Component {
 			headers: {
 				Authorization: `Bearer ${localStorage.getItem('userToken')}`
 			},
-			data: newTweet
+			data: {
+        content: this.state.tweet
+      }
 		})
 			.then(res => {
           this.toggle();
-					this.props.updateUserTweets(res.data.tweet);
+					this.props.updateUserTweets(res.data);
 				})
-			.catch(err => { console.log(err); });
+			.catch(err => console.log(err));
   };
 
   handleChange(e) {
@@ -60,7 +57,7 @@ class TweetModal extends Component {
 
   render() {
     return (
-      <div style={{ textAlign: "center" }}>
+      <>
         <Button color="primary" id="tweet-button" onClick={this.toggle}>
           <i className="fas fa-feather-alt"></i>
           <span> Tweet</span>
@@ -73,10 +70,8 @@ class TweetModal extends Component {
         >
           <ModalHeader toggle={this.toggle}></ModalHeader>
           <ModalBody>
-            <div>
-              <img src={this.props.user.userData.image} alt="profile"/>
-            </div>
-            <Form onSubmit={e => this.handleTweet(this.state.tweet, e)}>
+            <img src={this.props.user.userData.image} alt="profile"/>
+            <Form onSubmit={this.handleTweet}>
               <FormGroup>
                 <Input
                   maxLength="280"
@@ -93,7 +88,7 @@ class TweetModal extends Component {
             </Form>
           </ModalBody>
         </Modal>
-      </div>
+      </>
     );
   }
 }

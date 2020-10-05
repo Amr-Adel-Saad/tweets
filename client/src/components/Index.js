@@ -10,8 +10,10 @@ class Index extends Component {
   }
   
   componentDidUpdate() {
+    // Redirect user to home if already logged in
     if (this.props.user.isLogged) {
       this.props.history.push('/home');
+    // Redirect user to login if not logged in
     } else {
       this.props.history.push('/login');
     }

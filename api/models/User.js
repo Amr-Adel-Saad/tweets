@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
@@ -25,6 +26,10 @@ const UserSchema = new Schema({
 	tweets: [{
 		type: Schema.Types.ObjectId,
 		ref: 'Tweet'
+	}],
+	replies: [{
+		type: Schema.Types.ObjectId,
+		ref: 'Reply'
 	}],
 	following: {
 		type: Array,

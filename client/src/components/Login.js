@@ -8,7 +8,7 @@ import { loginUser, checkLogin } from '../actions/userActions';
 
 class Login extends Component {
 	constructor(props) {
-		super(props);
+		super();
 		this.state = {
 			name: '',
 			password: '',
@@ -21,26 +21,27 @@ class Login extends Component {
 	}
 
 	componentDidMount() {
-		if (this.props.location.state !== undefined && this.props.location.state.flash !== undefined) {
+		// Flash "Registered" for user if just signed up
+		if (this.props.location.state && this.props.location.state.flash) {
 			this.setState({ flash: true });
 		}
 		this.props.checkLogin();
 	}
 
-	static getDerivedStateFromProps(props, state) {
-		if (props.user.isLogged) {
-			props.history.push('/home');
-			return null;
-		} else {
-			return null;
+	componentDidUpdate() {
+		// Redirect user to home if logged in
+		if (this.props.user.isLogged) {
+			this.props.history.push('/home');
 		}
 	}
 	
 	handleSubmit(e) {
 		e.preventDefault();
+
 		this.setState({ isLoading: true });
 		let { name, password } = this.state;
 		name = name.toLowerCase();
+
 		axios({
 			method: "post",
 			url: "/api/user/login",
@@ -48,6 +49,7 @@ class Login extends Component {
 		})
 			.then(res => {
 				localStorage.setItem('userToken', res.data.token);
+				// Login user and redirect to home
 				this.props.loginUser(res.data.user._id);
 				this.props.history.push('/home');
 			})
@@ -62,15 +64,16 @@ class Login extends Component {
 	}
 
 	handleChange(e) {
-		let targetName = e.target.getAttribute('name');
-		let newState = {};
+		// Get form data and change state
+		const targetName = e.target.getAttribute('name');
+		const newState = {};
 		newState[targetName] = e.target.value;
 		this.setState(newState);
 	}
 
 	render() {
 		return (
-			<div className="credentials">
+			<main className="credentials">
 				<div className="form-container">
 					<h1><i className="fa fa-twitter"></i> tweets</h1>
 					<Form onSubmit={this.handleSubmit} noValidate >
@@ -81,20 +84,23 @@ class Login extends Component {
 							<i className="fa fa-lg fa-check-circle"></i> Registered, Please log in!
 						</Alert>
 						<FormGroup>
-							<Input type="text" id="name" name="name" onChange={this.handleChange} value={this.state.name} placeholder="Username" autoFocus/>
+							<Input 
+								type="text" name="name" onChange={this.handleChange} 
+								value={this.state.name} placeholder="Username" autoFocus />
 						</FormGroup>
 						<FormGroup>
-							<Input type="password" id="password" name="password" onChange={this.handleChange} value={this.state.password} placeholder="Password" />
+							<Input type="password" name="password" onChange={this.handleChange} 
+								value={this.state.password} placeholder="Password" />
 						</FormGroup>
 						<Button color="primary" size="md" >
 							{(this.state.isLoading) ?
-								<Spinner color="light" style={{ height: "20px", width: "20px" }} />
+								<Spinner color="light" />
 								: <span>Log in</span>}
 						</Button>
 					</Form>
 					<p>Don't have an account? <Link to="/signup">Sign up</Link></p>
 				</div>
-			</div>
+			</main>
 		);
 	}
 }

@@ -1,40 +1,50 @@
 const express = require('express');
 const router = express.Router();
 
+// User checkAuth middleware
 const checkAuth = require('../middleware/check-auth');
-const Tweet = require('../models/Tweet');
+
+// User, Tweet, Reply model
 const User = require('../models/User');
+const Tweet = require('../models/Tweet');
+const Reply = require('../models/Reply');
 
 // Post tweet
 router.post('/', checkAuth, (req, res) => {
-  const { content, author } = req.body;
+  const newTweet = Tweet({
+    content: req.body.content,
+    author: req.userData.userId
+  });
 
-  if (author === req.userData.userId) {
-    const newTweet = Tweet({
-      content,
-      author
-    });
-  
-    newTweet.save()
-      .then(saved => {
-        User.updateOne(
-          { _id: author }, 
-          { $push: { tweets: { 
-            $each: [saved._id],
-            $position: 0
-          } } }).exec()
-          .then(() => res.status(200).json({ message: 'Tweet saved', tweet: saved }))
-          .catch(err => res.status(500).json({ error: err }));
-        })
-      .catch(err => res.status(500).json({ error: err }));
-  } else {
-    return res.status(401).json({ message: 'Auth failed' });
-  }
+  newTweet.save()
+    .then(saved => {
+      User.updateOne(
+        { _id: req.userData.userId },
+        {
+          $push: {
+            tweets: {
+              $each: [saved._id],
+              $position: 0
+            }
+          }
+        }).exec()
+        .then(() => res.status(200).json(saved))
+        .catch(err => res.status(500).json({ error: err }));
+    })
+    .catch(err => res.status(500).json({ error: err }));
 });
 
 // Get tweet
 router.get('/:tweetId', (req, res) => {
-  Tweet.findOne({ _id: req.params.tweetId }).populate('author', 'name image').exec()
+  Tweet.findOne({ _id: req.params.tweetId })
+    .populate('author', 'name image')
+    .populate({
+      path: 'replies',
+      populate: {
+        path: 'author',
+        select: 'name image'
+      }
+    }).exec()
     .then(tweet => {
       if (tweet) {
         return res.status(200).json(tweet);
@@ -48,8 +58,8 @@ router.get('/:tweetId', (req, res) => {
 // Get most liked
 router.get('/trending', (req, res) => {
   Tweet.find()
-  .sort({ likes: -1 })
-  .limit(10)
+    .sort({ likes: -1 })
+    .limit(10)
     .then(tweets => {
       if (tweets) {
         return res.status(200).json(tweets);
@@ -61,44 +71,73 @@ router.get('/trending', (req, res) => {
 });
 
 // Patch tweet
-router.patch('/:tweetId', checkAuth ,(req, res) => {
+router.patch('/:tweetId', checkAuth, (req, res) => {
+  // Like tweet
   if (req.body.type === 'like') {
     Tweet.updateOne(
       { _id: req.params.tweetId },
-      { "$addToSet": { "likers": req.body.userId },
-        "$inc": { "likes": 1 } }).exec()
-      .then(tweet => res.status(200).json(tweet))
+      {
+        $addToSet: { 'likers': req.userData.userId },
+        $inc: { 'likes': 1 }
+      }).exec()
+      .then(() => res.status(200).json({ message: 'Tweet liked' }))
       .catch(err => res.status(500).json({ error: err }));
   } else if (req.body.type === 'dislike') {
+    // Dislike tweet
     Tweet.updateOne(
       { _id: req.params.tweetId },
-      { "$pull": { "likers": req.body.userId },
-        "$inc": { "likes": -1 } }).exec()
-      .then(tweet => res.status(200).json(tweet))
-      .catch(err => res.status(500).json({ error: err }));
-  } else if (req.body.type === 'reply') {
-    Tweet.updateOne(
-      { _id: req.params.tweetId },
-      { "$push": { "replies": { 
-        name: req.body.name,
-        content: req.body.content
-       } } }).exec()
-      .then(tweet => res.status(200).json(tweet))
+      {
+        $pull: { 'likers': req.userData.userId },
+        $inc: { 'likes': -1 }
+      }).exec()
+      .then(() => res.status(200).json({ message: 'Tweet disliked' }))
       .catch(err => res.status(500).json({ error: err }));
   } else {
-    return res.status(400).json({ message: 'Bad request' });
+    res.status(400);
   }
+});
+
+// Post reply
+router.post('/:tweetId/reply', checkAuth, (req, res) => {
+  const newReply = Reply({
+    content: req.body.content,
+    author: req.userData.userId
+  });
+
+  newReply.save()
+    .then(saved => {
+      User.updateOne(
+        { _id: req.body._id },
+        {
+          $push: {
+            'replies': [saved._id],
+          }
+        }).exec()
+        .then(() => {
+          Tweet.updateOne(
+            { _id: req.params.tweetId },
+            {
+              $push: {
+                'replies': [saved._id]
+              }
+            }).exec()
+            .then(saved => res.status(200).json(saved))
+            .catch(err => res.status(500).json({ error: err }));
+        })
+        .catch(err => res.status(500).json({ error: err }));
+    })
+    .catch(err => res.status(500).json({ error: err }));
 });
 
 // Delete tweet
 router.delete('/:tweetId', checkAuth, (req, res) => {
   if (req.body.userId === req.userData.userId) {
-		Tweet.deleteOne({ _id: req.params.tweetId }).exec()
-			.then(() => res.status(200).json({ message: 'Tweet deleted' }))
-			.catch(err => res.status(500).json({ error: err }));
-	} else {
-		res.status(401).json({ message: 'Auth failed' });
-	}
+    Tweet.deleteOne({ _id: req.params.tweetId }).exec()
+      .then(() => res.status(200).json({ message: 'Tweet deleted' }))
+      .catch(err => res.status(500).json({ error: err }));
+  } else {
+    res.status(401).json({ message: 'Auth failed' });
+  }
 });
 
 module.exports = router;

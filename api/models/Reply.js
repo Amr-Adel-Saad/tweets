@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const TweetSchema = new Schema({
+const ReplySchema = new Schema({
 	content: {
 		type: String,
 		required: true
@@ -15,10 +15,6 @@ const TweetSchema = new Schema({
     type: Number,
     default: 0
   },
-  replies: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Reply'
-  }],
   author: {
     type: Schema.Types.ObjectId,
     ref: 'User'
@@ -26,4 +22,4 @@ const TweetSchema = new Schema({
 },
 { timestamps: true });
 
-module.exports = mongoose.model('Tweet', TweetSchema);
+module.exports = mongoose.model('Reply', ReplySchema);

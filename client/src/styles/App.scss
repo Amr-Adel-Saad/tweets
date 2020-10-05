@@ -19,17 +19,17 @@ html {
   width: 47%;
 }
 
+.col-2-5 {
+  width: 22%;
+}
+
 body {
-  margin: 0;
   padding: 0 !important;
+  margin: 0 !important;
   background-color: $back-blue;
   box-sizing: border-box;
   color: white;
   font-family: "Ubuntu", "Roboto";
-}
-
-::placeholder {
-  color: rgb(150, 150, 150) !important;
 }
 
 .btn {
@@ -40,15 +40,13 @@ a, button {
   transition: background-color 0.2s, color 0.2s, border 0.2s;
 }
 
-.tweet-container {
-  width: 100%;
+.tweet-container, .reply-container {
   position: relative;
-  text-align: left;
   display: flex;
-  border-bottom: 1px solid rgba(255,255,255,.25);
+  border-bottom: 1px solid rgba(255, 255, 255, .25);
   transition: background-color 0.2s, color 0.2s;
-  padding: 8px;
-  justify-content: space-around;
+  padding: 14px;
+  padding-bottom: 0;
 
   img {
     width: 50px;
@@ -56,65 +54,63 @@ a, button {
     border-radius: 50%;
   }
 
-  .tweet-main {
-    width: 85%;
-
-    span {
-      font-size: 16px;
-      font-weight: bold;
-    }
-  }
-
-  .tweet-content {
+  .tweet-main, .reply-main {
+    margin-left: 10px;
+    margin-right: 6px;
+    font-weight: bold;
     display: flex;
     flex-direction: column;
     width: 100%;
+    align-items: flex-start;
+  }
 
-    p {
-      margin-top: 1%;
-      margin-bottom: 0;
-      word-break: break-all;
+  p {
+    margin-top: 6px;
+    margin-bottom: 8px;
+    text-align: left;
+    word-break: break-word;
+    font-weight: lighter;
+  }
+
+  .tweet-reactions {
+    z-index: 2;
+    align-self: flex-end;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+
+    .btn {
+      box-shadow: none;
+      padding: 0;
+      background-color: transparent !important;
+      border: none;
+      color: darkgray;
     }
 
-    div {
-      z-index: 2;
-      align-self: flex-end;
-      background-color: transparent !important;
+    span {
+      font-size: 18px;
+    }
 
-      .btn {
-        box-shadow: none;
-        margin: 0 3px;
-        padding: 0;
-        background-color: transparent;
-        border: none;
-      }
+    #reply-button {
+      margin-right: 16px;
+    }
 
-      .liked {
-        color: $heart;
-        background-color: transparent !important;
-        box-shadow: none !important;
-      }
-      
-      .liked:hover {
-        color: darkgray;
-      }
-      
-      .like {
-        color: darkgray;
-        background-color: transparent !important;
-        box-shadow: none !important;
-      }
-      
-      .like:hover {
-        color: $heart;
-      }
-
-      p {
-        display: inline-block;
-        font-size: 14px;
-        color: darkgray;
-        margin: 0 5px;
-      }
+    .liked {
+      color: $heart;
+      margin-right: 6px;
+    }
+    
+    .liked:hover {
+      color: darkgray;
+    }
+    
+    .like {
+      color: darkgray;
+      margin-right: 6px;
+    }
+    
+    .like:hover {
+      color: $heart;
     }
   }
 
@@ -136,8 +132,21 @@ a, button {
   background-color: rgba(21, 48, 71, 0.4);
 }
 
-.back-button-div {
+.reply-container {
   width: 100%;
+  align-self: flex-end;
+
+  img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .reply-main {
+    margin-bottom: 14px;
+  }
+}
+
+.back-button-div {
   position: sticky;
   background-color: $back-blue;
   z-index: 2;
@@ -145,21 +154,22 @@ a, button {
   height: 55px;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid rgba(255,255,255,.25);
+  border-bottom: 1px solid rgba(255, 255, 255, .25);
 
   .back-button {
-    background-color: transparent;
     padding: 7px 12px;
-    margin-left: 2%;
+    margin-left: 12px;
     border: none;
     color: $main-blue !important;
-    background-color: transparent !important;
-    text-shadow: none;
-    outline: none;
+    background-color: transparent;
     border-radius: 60%;
   }
   
   .back-button:hover {
+    background-color: $hover-blue;
+  }
+
+  .back-button:focus {
     background-color: $hover-blue !important;
   }
 
@@ -167,12 +177,12 @@ a, button {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin: 4%;
+    margin: 22px;
 
     h2 {
       font-size: 18px;
       font-weight: bolder;
-      margin: 0;
+      margin: 2px 0;
     }
 
     span {
@@ -182,10 +192,135 @@ a, button {
   }
 }
 
+.modal {
+  background-color: rgba(213, 234, 255, 0.2);
+
+  .modal-dialog {
+    width: 500px;
+  }
+
+  .modal-content {
+    border-radius: 16px;
+    background-color: $back-blue;
+  }
+
+  .modal-header {
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border-bottom: 1px solid rgba(255,255,255,.25);
+  }
+
+  .close {
+    padding: 1px 9px 4px 9px;
+    font-weight: lighter;
+    text-shadow: none;
+    outline: none;
+    border-radius: 50%;
+    color: rgba(29, 161, 242, 1.00);
+    margin-left: 0;
+    font-size: 36px;
+  }
+
+  .close:hover {
+    background-color: $hover-blue;
+  }
+
+  .modal-body {
+    display: flex;
+    justify-content: space-between;
+    min-height: 300px;
+    padding: 14px;
+  }
+
+  img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+  
+  form {
+    width: 90%;
+
+    .form-group {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      textarea {
+        padding-right: 0;
+        font-size: 18px;
+        background-color: $back-blue;
+        color: white;
+        border-radius: 0;
+        border: none;
+        border-bottom: 1px solid rgba(255,255,255,.25);
+        box-shadow: none;
+        min-height: 210px;
+        resize: none;
+      }
+    
+      button {
+        margin-bottom: 6px;
+        font-weight: bold;
+        width: 100px;
+        align-self: flex-end;
+        border-radius: 20px;
+      }
+    }
+  }
+}
+
+#current-tweet {
+  position: relative;
+  min-height: 100vh;
+  margin-left: 22%;
+  border-right: 1px solid rgba(255, 255, 255, .25);
+  display: flex;
+  flex-direction: column;
+
+  .tweet-container {
+    flex-wrap: wrap;
+    border-bottom: 10px solid rgb(37, 51, 65);
+  }
+
+  .tweet-container:hover {
+    background-color: transparent;
+  }
+
+  .tweet-main {
+    margin: auto 10px;
+    p {
+      font-size: 34px;
+    }
+  }
+
+  #reply-button {
+    color: darkgray;
+  }
+
+  #reply-button:hover {
+    color: $main-blue;
+  }
+
+  .tweet-info {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 50px;
+    color: darkgray;
+    border-top: 1px solid rgba(255, 255, 255, .25);
+  }
+}
+
 #delete-tweet {
   position: absolute;
-  top: 10%;
-  right: 2%;
+  top: 14px;
+  right: 14px;
 }
 
 #notfound {

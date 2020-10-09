@@ -6,6 +6,8 @@ import { Navbar, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
 import TweetModal from './TweetModal';
 import LogoutModal from './LogoutModal';
 
+import { logoutUser } from '../actions/userActions';
+
 const Navigation = (props) => {
   return (
     <Navbar className="col-2-5" id="main-navbar">
@@ -24,7 +26,7 @@ const Navigation = (props) => {
           </NavLink>
         </NavItem>
         <NavItem>
-          <NavLink tag={Link} to={ `/profile/${props.user.userData.name}/` }>
+          <NavLink tag={Link} to={`/profile/${props.user.userData.name}/`}>
             <i className="fa fa-fw fa-user"></i>
             <span>&ensp;Profile</span>
           </NavLink>
@@ -34,11 +36,12 @@ const Navigation = (props) => {
           {
             (props.user.userData)
               ? <div>
-                  <img src={props.user.userData.image} alt="profile"/><br/>{props.user.userData.name}
-                </div>
+                <img src={props.user.userData.image} alt="profile" /><br />
+                <span>{props.user.userData.name}</span>
+              </div>
               : <div>
-                  <img src="/uploads/default.png" alt="profile"/><br/><br/>
-                </div>
+                <img src="/uploads/default.png" alt="profile" /><br />
+              </div>
           }
           <LogoutModal handleLogout={props.handleLogout} />
         </section>
@@ -51,4 +54,4 @@ const mapStateToProps = state => ({
   user: state.user
 });
 
-export default connect(mapStateToProps)(Navigation);
+export default connect(mapStateToProps, { logoutUser })(Navigation);

@@ -25,24 +25,32 @@ class TweetModal extends Component {
     this.handleTweet = this.handleTweet.bind(this);
   }
 
-  handleTweet (e) {
-		e.preventDefault();
+  handleTweet(e) {
+    e.preventDefault();
 
     axios({
-			method: 'post',
-			url: `/api/tweet/`,
-			headers: {
-				Authorization: `Bearer ${localStorage.getItem('userToken')}`
-			},
-			data: {
+      method: 'post',
+      url: `/api/tweet/`,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('userToken')}`
+      },
+      data: {
         content: this.state.tweet
       }
-		})
-			.then(res => {
-          this.toggle();
-					this.props.updateUserTweets(res.data);
-				})
-			.catch(err => console.log(err));
+    })
+      .then(res => {
+        this.toggle();
+        
+        res.data.createdAt = new Date(res.data.createdAt).toLocaleDateString(
+          'en-gb',
+          {
+            day: 'numeric',
+            month: 'short'
+          }
+        );
+        this.props.updateUserTweets(res.data);
+      })
+      .catch(err => console.log(err));
   };
 
   handleChange(e) {
@@ -70,7 +78,7 @@ class TweetModal extends Component {
         >
           <ModalHeader toggle={this.toggle}></ModalHeader>
           <ModalBody>
-            <img src={this.props.user.userData.image} alt="profile"/>
+            <img src={this.props.user.userData.image} alt="profile" />
             <Form onSubmit={this.handleTweet}>
               <FormGroup>
                 <Input

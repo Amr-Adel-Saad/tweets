@@ -8,9 +8,7 @@ import { Provider } from 'react-redux';
 import Index from './components/Index';
 import Login from './components/Login';
 import Signup from './components/Signup';
-import Home from './components/Home';
-import Profile from './components/Profile/Profile';
-import Tweet from './components/Tweet';
+import Main from './components/Main';
 
 import store, { history } from './store';
 
@@ -23,9 +21,9 @@ const App = () => {
             <Route exact path="/" component={Index} />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
-            <Route path="/home" component={Home} />
-            <Route path="/profile/:username/status/:tweetId" component={Tweet} />
-            <Route path="/profile/:username" component={Profile} />
+            <Route path="/home" component={Main} />
+            <Route path="/profile/:username/status/:tweetId" component={Main} />
+            <Route path="/profile/:username" component={Main} />
             <Route render={() => 
               <div id="notfound">
                 <h1>404 Not found!</h1>

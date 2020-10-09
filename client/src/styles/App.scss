@@ -72,6 +72,25 @@ a, button {
     font-weight: lighter;
   }
 
+  .name-date {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 18px;
+  }
+
+  span {
+    font-size: 18px;
+  }
+
+  .date {
+    font-size: 15px;
+    margin-left: 12px;
+    font-weight: normal;
+    color: darkgray;
+  }
+
   .tweet-reactions {
     z-index: 2;
     align-self: flex-end;
@@ -85,10 +104,6 @@ a, button {
       background-color: transparent !important;
       border: none;
       color: darkgray;
-    }
-
-    span {
-      font-size: 18px;
     }
 
     #reply-button {
@@ -135,11 +150,7 @@ a, button {
 .reply-container {
   width: 100%;
   align-self: flex-end;
-
-  img {
-    width: 40px;
-    height: 40px;
-  }
+  border-left: 10px solid rgb(37, 51, 65);
 
   .reply-main {
     margin-bottom: 14px;
@@ -169,7 +180,7 @@ a, button {
     background-color: $hover-blue;
   }
 
-  .back-button:focus {
+  .back-button:active {
     background-color: $hover-blue !important;
   }
 
@@ -202,6 +213,7 @@ a, button {
   .modal-content {
     border-radius: 16px;
     background-color: $back-blue;
+    margin: auto;
   }
 
   .modal-header {
@@ -274,6 +286,31 @@ a, button {
   }
 }
 
+.delete-modal {
+  font-weight: normal;
+
+  .modal-content {
+    width: 400px;
+  }
+
+  .modal-body {
+    min-height: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  div {
+    width: 100%;
+    text-align: center;
+  }
+
+  .btn {
+    margin: auto 20px
+  }
+}
+
 #current-tweet {
   position: relative;
   min-height: 100vh;
@@ -293,8 +330,10 @@ a, button {
 
   .tweet-main {
     margin: auto 10px;
+    margin-top: 10px;
+
     p {
-      font-size: 34px;
+      font-size: 26px;
     }
   }
 
@@ -314,6 +353,10 @@ a, button {
     height: 50px;
     color: darkgray;
     border-top: 1px solid rgba(255, 255, 255, .25);
+
+    span {
+      font-size: 16px;
+    }
   }
 }
 
@@ -321,6 +364,14 @@ a, button {
   position: absolute;
   top: 14px;
   right: 14px;
+}
+
+.loading {
+  position: absolute; 
+  left: 0; 
+  right: 0;
+  top: 50%;
+  margin: auto;
 }
 
 #notfound {

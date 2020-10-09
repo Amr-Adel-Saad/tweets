@@ -2,13 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 class Followers extends Component {
-  constructor(props) {
-		super(props);
-		this.state = {
-			currentProfile: ''
-    };
-  }
-  
   render() {
     return (
       <div>

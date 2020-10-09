@@ -8,28 +8,17 @@ class Index extends Component {
   componentDidMount() {
     this.props.checkLogin();
   }
-  
+
   componentDidUpdate() {
     // Redirect user to home if already logged in
     if (this.props.user.isLogged) {
       this.props.history.push('/home');
-    // Redirect user to login if not logged in
-    } else {
-      this.props.history.push('/login');
     }
   }
-  
+
   render() {
     return (
-      <Spinner color="primary"
-          style={{
-            position: "absolute",
-            top: "50%",
-            bottom: "50%",
-            right: "50%",
-            left: "50%"
-          }}
-        />
+      <Spinner className="loading" color="primary" />
     );
   }
 }

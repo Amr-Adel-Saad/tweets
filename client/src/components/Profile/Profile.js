@@ -4,7 +4,6 @@ import { Form, FormGroup, Label, Input, Button, Spinner } from 'reactstrap';
 import { Route } from 'react-router';
 import axios from 'axios';
 
-import Navigation from '../Navigation';
 import Links from './Links';
 import Tweets from './Tweets';
 import Following from './Following';
@@ -17,23 +16,29 @@ class Profile extends Component {
 		super();
 		this.state = {
 			currentProfile: '',
-			userImage: '',
 			following: 'Follow',
 			isLoading: true
 		};
-		this.handleLogout = this.handleLogout.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleFollow = this.handleFollow.bind(this);
 		this.handleLike = this.handleLike.bind(this);
-		this.goBack = this.goBack.bind(this);
 	}
 
 	componentDidMount() {
-		this.props.checkLogin();
-
+		// Get profile Data
 		axios.get(`/api/user/profile/${this.props.match.params.username}`)
 			.then(res => {
+				res.data.tweets.map(tweet => {
+					tweet.createdAt = new Date(tweet.createdAt).toLocaleDateString(
+						'en-gb',
+						{
+							day: 'numeric',
+							month: 'short'
+						}
+					);
+					return tweet;
+				});
 				this.setState({
 					currentProfile: res.data,
 					isLoading: false
@@ -46,6 +51,7 @@ class Profile extends Component {
 	}
 
 	static getDerivedStateFromProps(props, state) {
+		// Check if user is following current profile
 		if (props.user.userData.following
 			&& props.user.userData.following.includes(state.currentProfile.name)) {
 			return { following: 'Followed' };
@@ -54,16 +60,29 @@ class Profile extends Component {
 		}
 	}
 
+
 	componentDidUpdate = (prevProps) => {
+		// Reload profile data if params username changed
 		if (this.props.match.params.username !== prevProps.match.params.username) {
-			this.setState({ isLoading: true })
+			this.setState({ isLoading: true });
 			axios.get(`/api/user/profile/${this.props.match.params.username}`)
 				.then(res => {
+					res.data.tweets.map(tweet => {
+						tweet.createdAt = new Date(tweet.createdAt).toLocaleDateString(
+							'en-gb',
+							{
+								day: 'numeric',
+								month: 'short'
+							}
+						);
+						return tweet;
+					});
 					this.setState({ currentProfile: res.data, isLoading: false });
 				})
 				.catch(err => console.log(err));
 		}
 
+		// Update user picture
 		if (prevProps.user.userData !== this.props.user.userData) {
 			if (this.props.user.userData.name === this.state.currentProfile.name) {
 				this.setState({ currentProfile: this.props.user.userData });
@@ -71,20 +90,18 @@ class Profile extends Component {
 		}
 	};
 
-	handleLogout() {
-		this.props.logoutUser();
-		this.props.history.push('/login');
-	}
-
 	handleChange(e) {
+		// Submit form once a file is selected
 		e.target.form.dispatchEvent(new Event('submit'));
 	}
 
 	handleSubmit(e) {
 		e.preventDefault();
+
 		const formData = new FormData();
 		formData.append('userImage', e.target.userImage.files[0]);
 
+		// Update user image
 		axios({
 			method: 'patch',
 			url: `/api/user/${this.props.user.userData._id}`,
@@ -136,8 +153,9 @@ class Profile extends Component {
 
 	handleLike(tweetId, e) {
 		e.persist();
-		console.log(e.target.parentElement);
+
 		let currentProfile = { ...this.state.currentProfile };
+
 		if (e.target.parentElement.value === 'like') {
 			axios({
 				method: 'patch',
@@ -189,101 +207,79 @@ class Profile extends Component {
 		}
 	}
 
-	goBack() {
-		this.props.history.goBack();
-	}
-
 	render() {
 		return (
-			<div className="row">
-				<Navigation
-					isLogged={this.props.user.isLogged} userData={this.props.user.userData}
-					handleLogout={this.handleLogout} userImage={this.state.userImage} />
-				<main id="profile" className="col-5-5">
-					{
-						(this.state.isLoading)
-							? <Spinner color="primary"
-								style={{
-									position: "absolute",
-									top: "50%",
-									bottom: "50%",
-									alignSelf: "center"
-								}}
-							/>
-							: (this.state.currentProfile === '')
-								? <h2>Oops! Couldn't find username "{this.props.match.params.username}"</h2>
-								:
-								<>
-									<div className="back-button-div">
-										<Button onClick={this.goBack} className="back-button">
-											<i className="fas fa-md fa-arrow-left"></i>
-										</Button>
-										<div>
-											<h2>{this.state.currentProfile.name}</h2>
-											<span>{this.state.currentProfile.tweets.length} Tweets</span>
-										</div>
+			<main id="profile" className="col-5-5">
+				{
+					(this.state.isLoading)
+						? <Spinner className="loading" color="primary" />
+						: (this.state.currentProfile === '')
+							? <h2>Oops! Couldn't find username "{this.props.match.params.username}"</h2>
+							:
+							<>
+								<div className="back-button-div">
+									<Button onClick={this.props.goBack} className="back-button">
+										<i className="fas fa-md fa-arrow-left"></i>
+									</Button>
+									<div>
+										<h2>{this.state.currentProfile.name}</h2>
+										<span>{this.state.currentProfile.tweets.length} Tweets</span>
 									</div>
-									<div id="img-container">
-										<img src={'http://localhost:5000' + this.state.currentProfile.image}
-											alt="profile" />
-										<p>{this.state.currentProfile.name}</p>
-										{(() => {
-											if (this.state.currentProfile.name === this.props.user.userData.name) {
-												return <Form onSubmit={this.handleSubmit}>
-													<FormGroup>
-														<Label htmlFor="userImage">
-															<i className="fa fa-2x fa-camera"></i>
-														</Label>
-														<Input type="file" id="userImage" title="x"
-															name="userImage" onChange={this.handleChange} />
-													</FormGroup>
-												</Form>
-											} else if (this.state.following === 'Followed') {
-												return <Button onMouseOver={() => {
-													document.getElementById('follow').innerHTML = 'Unfollow'
-													document.getElementById('follow').className = 'unfollow btn-lg'
+								</div>
+								<div id="img-container">
+									<img src={'http://localhost:5000' + this.state.currentProfile.image}
+										alt="profile" />
+									<p>{this.state.currentProfile.name}</p>
+									{(() => {
+										if (this.state.currentProfile.name === this.props.user.userData.name) {
+											return <Form onSubmit={this.handleSubmit}>
+												<FormGroup>
+													<Label htmlFor="userImage">
+														<i className="fa fa-2x fa-camera"></i>
+													</Label>
+													<Input type="file" id="userImage" title="x"
+														name="userImage" onChange={this.handleChange} />
+												</FormGroup>
+											</Form>
+										} else if (this.state.following === 'Followed') {
+											return <Button onMouseOver={() => {
+												document.getElementById('follow').innerHTML = 'Unfollow'
+												document.getElementById('follow').className = 'unfollow btn-lg'
+											}}
+												onMouseOut={() => {
+													document.getElementById('follow').innerHTML = 'Followed'
+													document.getElementById('follow').className = 'followed btn-lg'
 												}}
-													onMouseOut={() => {
-														document.getElementById('follow').innerHTML = 'Followed'
-														document.getElementById('follow').className = 'followed btn-lg'
-													}}
-													value="unfollow" onClick={this.handleFollow} id="follow"
-													className="followed btn-lg">
-													{this.state.following}</Button>
-											} else {
-												return <Button value="follow" onClick={this.handleFollow}
-													className="follow btn-lg">
-													{this.state.following}</Button>
-											}
-										})()
+												value="unfollow" onClick={this.handleFollow} id="follow"
+												className="followed btn-lg">
+												{this.state.following}</Button>
+										} else {
+											return <Button value="follow" onClick={this.handleFollow}
+												className="follow btn-lg">
+												{this.state.following}</Button>
 										}
-									</div>
-									<Links name={this.state.currentProfile.name} />
-									<Route key={this.props.match.params.username} exact 
-										path="/profile/:username" render={() => (
+									})()
+									}
+								</div>
+								<Links name={this.state.currentProfile.name} />
+								<Route key={this.props.match.params.username} exact
+									path="/profile/:username" render={() => (
 										<Tweets
 											currentProfile={this.state.currentProfile}
-											handleLike={this.handleLike}
-										/>
-									)}
-									/>
-									<Route path="/profile/:username/following" render={() => (
-										<Following currentProfile={this.state.currentProfile} />
-									)}
-									/>
-									<Route path="/profile/:username/followers" render={() => (
-										<Followers currentProfile={this.state.currentProfile} />
-									)}
-									/>
-									<Route path="/profile/:username/likes" render={() => (
-										<Likes currentProfile={this.state.currentProfile} />
-									)}
-									/>
-								</>
-					}
-				</main>
-				<div className="col-3">Most liked</div>
-			</div>
+											handleLike={this.handleLike} />
+									)} />
+								<Route path="/profile/:username/following" render={() => (
+									<Following currentProfile={this.state.currentProfile} />
+								)} />
+								<Route path="/profile/:username/followers" render={() => (
+									<Followers currentProfile={this.state.currentProfile} />
+								)} />
+								<Route path="/profile/:username/likes" render={() => (
+									<Likes currentProfile={this.state.currentProfile} />
+								)} />
+							</>
+				}
+			</main>
 		);
 	}
 }

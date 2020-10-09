@@ -9,9 +9,11 @@ export const loginUser = (userId) => dispatch => {
     type: LOGIN_USER
   });
 
-  axios.get(`/api/user/profile/${userId}`, { headers: {
-    Authorization: `Bearer ${localStorage.getItem('userToken')}`
-  }})
+  axios.get(`/api/user/profile/${userId}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('userToken')}`
+    }
+  })
     .then(res => {
       dispatch({
         type: GET_USER,
@@ -31,21 +33,29 @@ export const logoutUser = () => dispatch => {
 export const checkLogin = () => dispatch => {
   const decoded = jwt.decode(localStorage.getItem('userToken'));
   if (decoded) {
-    axios.get(`/api/user/${decoded.userId}`, { headers: {
-      Authorization: `Bearer ${localStorage.getItem('userToken')}`
-    }})
+    axios.get(`/api/user/${decoded.userId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('userToken')}`
+      }
+    })
       .then(res => {
-        if (res.status === 401) {
-          dispatch(push('/login'));
-        } else {
-          dispatch({
-            type: LOGIN_USER
-          });
-          dispatch({
-            type: GET_USER,
-            payload: res.data
-          });
-        }
+        res.data.tweets.map(tweet => {
+          tweet.createdAt = new Date(tweet.createdAt).toLocaleDateString(
+            'en-gb',
+            {
+              day: 'numeric',
+              month: 'short'
+            }
+          );
+          return tweet;
+        });
+        dispatch({
+          type: LOGIN_USER
+        });
+        dispatch({
+          type: GET_USER,
+          payload: res.data
+        });
       })
       .catch(err => {
         dispatch(push('/login'));

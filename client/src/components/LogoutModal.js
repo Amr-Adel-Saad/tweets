@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
   Button,
   Modal,
-  ModalHeader,
   ModalBody
 } from 'reactstrap';
 import { connect } from 'react-redux';
@@ -22,8 +21,8 @@ class LogoutModal extends Component {
     this.handleTweet = this.handleTweet.bind(this);
   }
 
-  handleTweet (tweet, e) {
-		e.preventDefault();
+  handleTweet(tweet, e) {
+    e.preventDefault();
 
     const newTweet = {
       content: tweet,
@@ -31,18 +30,18 @@ class LogoutModal extends Component {
     }
 
     axios({
-			method: 'post',
-			url: `/api/tweet/`,
-			headers: {
-				Authorization: `Bearer ${localStorage.getItem('userToken')}`
-			},
-			data: newTweet
-		})
-			.then(res => {
-          this.toggle();
-					this.props.updateUserTweets(res.data.tweet);
-				})
-			.catch(err => { console.log(err); });
+      method: 'post',
+      url: `/api/tweet/`,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('userToken')}`
+      },
+      data: newTweet
+    })
+      .then(res => {
+        this.toggle();
+        this.props.updateUserTweets(res.data.tweet);
+      })
+      .catch(err => { console.log(err); });
   };
 
   handleChange(e) {
@@ -57,7 +56,7 @@ class LogoutModal extends Component {
 
   render() {
     return (
-      <div style={{ textAlign: "center" }}>
+      <>
         <Button style={{ margin: "15px auto" }} color="primary" onClick={this.toggle}>
           <i className="fa fa-fw fa-sign-out"></i>
           <span> Log out</span>
@@ -67,23 +66,19 @@ class LogoutModal extends Component {
           isOpen={this.state.modal}
           toggle={this.props.toggle}
           autoFocus={false}
+          className="delete-modal"
         >
-          <ModalHeader style={{ display: "none" }}></ModalHeader>
-          <ModalBody style={{ display: "flex", 
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "space-around"
-            }}>
-            <h2 style={{ margin: "3% auto" }}>Log out of Tweets ?</h2>
-            <div style={{ width: "100%", textAlign: "center" }}>
-              <Button onClick={this.toggle} style={{ margin: "3%" }}>Cancel</Button>
-              <Button onClick={this.props.handleLogout} style={{ margin: "3%" }} color="primary" 
-                autoFocus={true}>Log out
+          <ModalBody>
+            <h2>Log out of Tweets ?</h2>
+            <div>
+              <Button onClick={this.toggle} >Cancel</Button>
+              <Button onClick={this.props.handleLogout} color="primary">
+                Log out
               </Button>
             </div>
           </ModalBody>
         </Modal>
-      </div>
+      </>
     );
   }
 }

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 class Likes extends Component {
   constructor(props) {
-		super(props);
+		super();
 		this.state = {
 			currentProfile: ''
     };

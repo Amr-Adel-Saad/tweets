@@ -1,4 +1,5 @@
-import { LOGIN_USER, LOGOUT_USER, GET_USER, UPDATE_USER_TWEETS, UPDATE_USER_IMAGE } from '../actions/types';
+import { LOGIN_USER, LOGOUT_USER, GET_USER, 
+  UPDATE_USER_TWEETS, UPDATE_USER_IMAGE, FOLLOW_USER, UNFOLLOW_USER } from '../actions/types';
 
 const initialState = {
   isLogged: false,
@@ -37,6 +38,26 @@ export default function(state = initialState, action) {
         userData: {
           ...state.userData,
           image: action.payload
+        }
+      }
+    case FOLLOW_USER:
+      return {
+        ...state,
+        userData: {
+          ...state.userData,
+          following: [...state.userData.following, action.payload]
+        }
+      }
+    case UNFOLLOW_USER:
+      let following = state.userData.following;
+      let i = following.indexOf(action.payload);
+      following.splice(i, 1);
+
+      return {
+        ...state,
+        userData: {
+          ...state.userData,
+          following
         }
       }
     default:

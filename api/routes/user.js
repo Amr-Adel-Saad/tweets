@@ -131,8 +131,7 @@ router.post('/login', (req, res) => {
 // User profile
 router.get('/:userId', checkAuth, (req, res) => {
 	if (req.params.userId === req.userData.userId) {
-		User.findOne({ _id: req.userData.userId }).select('-password').populate('tweets')
-			.exec()
+		User.findOne({ _id: req.userData.userId }).select('-password').exec()
 			.then(user => {
 				if (user) {
 					res.status(200).json(user);
@@ -182,7 +181,7 @@ router.delete('/:userId', checkAuth, (req, res) => {
 
 // Current profile
 router.get('/profile/:username', (req, res) => {
-	User.findOne({ name: req.params.username }).select('-password').populate('tweets')
+	User.findOne({ name: req.params.username }).select('-password')
 		.exec()
 		.then(profile => {
 			if (profile) {

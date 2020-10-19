@@ -107,7 +107,7 @@ router.post('/:tweetId/reply', checkAuth, (req, res) => {
   newReply.save()
     .then(saved => {
       User.updateOne(
-        { _id: req.body._id },
+        { _id: req.userData._id },
         {
           $push: {
             'replies': [saved._id],
@@ -133,7 +133,15 @@ router.post('/:tweetId/reply', checkAuth, (req, res) => {
 router.delete('/:tweetId', checkAuth, (req, res) => {
   if (req.body.userId === req.userData.userId) {
     Tweet.deleteOne({ _id: req.params.tweetId }).exec()
-      .then(() => res.status(200).json({ message: 'Tweet deleted' }))
+      .then(() => {
+        User.updateOne({ _id: req.userData.userId }, {
+          $pull: {
+            tweets: req.params.tweetId
+          }
+        }).exec()
+          .then(() => res.status(200).json({ message: 'Tweet deleted' }))
+          .catch(err => res.status(500).json({ error: err }))
+      })
       .catch(err => res.status(500).json({ error: err }));
   } else {
     res.status(401).json({ message: 'Auth failed' });

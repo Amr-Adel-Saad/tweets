@@ -166,7 +166,7 @@ class Tweet extends Component {
             :
             <>
               <div className="back-button-div">
-                <Button onClick={this.goBack} className="back-button">
+                <Button onClick={this.props.goBack} className="back-button">
                   <i className="fas fa-md fa-arrow-left"></i>
                 </Button>
                 <div>

@@ -42,6 +42,8 @@
     
     .followed:hover {
       background-color: $main-blue;
+      border: 1px solid $heart;
+      transition: border 0s;
     }
     
     .unfollow:hover {
@@ -51,13 +53,28 @@
       color: white;
     }
 
+    .followed:hover::after {
+      content: 'Unfollow';
+      display: inline-block;
+      background-color: $heart;
+      font-size: 14px;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 30px;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+
     form {
       position: absolute;
       right: 15px;
       bottom: 0;
 
       .form-group {
-        margin: 14px;
+        margin-bottom: 4px;
       }
 
       label {
@@ -121,7 +138,94 @@
     border-bottom: 3px solid $main-blue;
   }
 
+  section {
+    position: relative;
+    height: 100%;
+  }
+
   h3 {
     margin-top: 30px;
+  }
+}
+
+.follower-container {
+  display: flex;
+  position: relative;
+  padding: 14px 18px;
+  justify-content: space-between;
+  height: 90px;
+  border-bottom: 1px solid rgba(255, 255, 255, .25);
+
+  img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+
+  span {
+    font-size: 18px;
+    font-weight: bold;
+    margin-left: 6px;
+  }
+
+  .follow {
+    position: relative;
+    z-index: 2;
+    font-size: 14px;
+    height: 40px;
+    font-weight: bold;
+    background-color: $back-blue;
+    border-radius: 30px;
+    box-shadow: none;
+    color: $main-blue;
+    border: 1px solid $main-blue;
+  }
+  
+  .follow:hover {
+    background-color: $hover-blue;
+  }
+  
+  .follow:focus {
+    outline: none;
+  }
+  
+  .followed {
+    @extend .follow;
+    background-color: $main-blue;
+    color: white;
+  }
+  
+  .followed:hover {
+    background-color: $main-blue;
+    border: 1px solid $heart;
+    transition: border 0s;
+  }
+
+  .followed:hover::after {
+    content: 'Unfollow';
+    display: inline-block;
+    background-color: $heart;
+    font-size: 14px;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 30px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  a {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    text-decoration: none; /* No underlines on the link */
+    z-index: 1; /* Places the link above everything else in the div */
+    background-color: #FFF; /* Fix to make div clickable in IE */
+    opacity: 0; /* Fix to make div clickable in IE */
+    filter: alpha(opacity=1); /* Fix to make div clickable in IE */
   }
 }

@@ -4,3 +4,5 @@ export const CHECK_LOGIN = 'CHECK_LOGIN';
 export const GET_USER = 'GET_USER';
 export const UPDATE_USER_TWEETS = 'UPDATE_USER_TWEETS';
 export const UPDATE_USER_IMAGE = 'UPDATE_USER_IMAGE';
+export const FOLLOW_USER = 'FOLLOW_USER';
+export const UNFOLLOW_USER = 'UNFOLLOW_USER';

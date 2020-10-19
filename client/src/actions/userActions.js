@@ -2,7 +2,9 @@ import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import { push } from 'connected-react-router';
 
-import { LOGIN_USER, LOGOUT_USER, GET_USER, UPDATE_USER_TWEETS, UPDATE_USER_IMAGE } from './types';
+import { LOGIN_USER, LOGOUT_USER, GET_USER, 
+  UPDATE_USER_TWEETS, UPDATE_USER_IMAGE,
+  FOLLOW_USER, UNFOLLOW_USER } from './types';
 
 export const loginUser = (userId) => dispatch => {
   dispatch({
@@ -39,16 +41,6 @@ export const checkLogin = () => dispatch => {
       }
     })
       .then(res => {
-        res.data.tweets.map(tweet => {
-          tweet.createdAt = new Date(tweet.createdAt).toLocaleDateString(
-            'en-gb',
-            {
-              day: 'numeric',
-              month: 'short'
-            }
-          );
-          return tweet;
-        });
         dispatch({
           type: LOGIN_USER
         });
@@ -77,5 +69,19 @@ export const updateUserImage = (image) => (dispatch) => {
   dispatch({
     type: UPDATE_USER_IMAGE,
     payload: image
+  });
+}
+
+export const addFollowing = (name) => (dispatch) => {
+  dispatch({
+    type: FOLLOW_USER,
+    payload: name
+  });
+}
+
+export const removeFollowing = (name) => (dispatch) => {
+  dispatch({
+    type: UNFOLLOW_USER,
+    payload: name
   });
 }

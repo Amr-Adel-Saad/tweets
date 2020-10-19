@@ -31,7 +31,8 @@ const Navigation = (props) => {
             <span>&ensp;Profile</span>
           </NavLink>
         </NavItem>
-        <TweetModal />
+        <TweetModal handleTweet={props.handleTweet} toggle={props.toggle}
+          tweetModal={props.tweetModal} />
         <section className="user-info">
           {
             (props.user.userData)

@@ -9,36 +9,27 @@ import Tweets from './Tweets';
 import Following from './Following';
 import Followers from './Followers';
 import Likes from './Likes';
-import { checkLogin, logoutUser, updateUserImage } from '../../actions/userActions';
+import {
+	checkLogin, logoutUser, updateUserImage,
+	addFollowing, removeFollowing
+} from '../../actions/userActions';
 
 class Profile extends Component {
 	constructor(props) {
 		super();
 		this.state = {
 			currentProfile: '',
-			following: 'Follow',
 			isLoading: true
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleFollow = this.handleFollow.bind(this);
-		this.handleLike = this.handleLike.bind(this);
 	}
 
 	componentDidMount() {
 		// Get profile Data
 		axios.get(`/api/user/profile/${this.props.match.params.username}`)
 			.then(res => {
-				res.data.tweets.map(tweet => {
-					tweet.createdAt = new Date(tweet.createdAt).toLocaleDateString(
-						'en-gb',
-						{
-							day: 'numeric',
-							month: 'short'
-						}
-					);
-					return tweet;
-				});
 				this.setState({
 					currentProfile: res.data,
 					isLoading: false
@@ -50,43 +41,25 @@ class Profile extends Component {
 			});
 	}
 
-	static getDerivedStateFromProps(props, state) {
-		// Check if user is following current profile
-		if (props.user.userData.following
-			&& props.user.userData.following.includes(state.currentProfile.name)) {
-			return { following: 'Followed' };
-		} else {
-			return null;
-		}
-	}
-
-
 	componentDidUpdate = (prevProps) => {
 		// Reload profile data if params username changed
 		if (this.props.match.params.username !== prevProps.match.params.username) {
 			this.setState({ isLoading: true });
+
 			axios.get(`/api/user/profile/${this.props.match.params.username}`)
 				.then(res => {
-					res.data.tweets.map(tweet => {
-						tweet.createdAt = new Date(tweet.createdAt).toLocaleDateString(
-							'en-gb',
-							{
-								day: 'numeric',
-								month: 'short'
-							}
-						);
-						return tweet;
+					this.setState({
+						currentProfile: res.data,
+						isLoading: false
 					});
-					this.setState({ currentProfile: res.data, isLoading: false });
 				})
 				.catch(err => console.log(err));
 		}
 
 		// Update user picture
-		if (prevProps.user.userData !== this.props.user.userData) {
-			if (this.props.user.userData.name === this.state.currentProfile.name) {
-				this.setState({ currentProfile: this.props.user.userData });
-			}
+		if (this.props.user.userData.image !== prevProps.user.userData.image
+			&& this.props.user.userData.name === this.props.match.params.username) {
+			this.setState({ currentProfile: this.props.user.userData });
 		}
 	};
 
@@ -130,7 +103,7 @@ class Profile extends Component {
 				}
 			})
 				.then(res => {
-					this.setState({ following: 'Followed' });
+					this.props.addFollowing(this.state.currentProfile.name);
 				})
 				.catch(err => console.log(err));
 		} else {
@@ -145,63 +118,7 @@ class Profile extends Component {
 				}
 			})
 				.then(res => {
-					this.setState({ following: 'Follow' });
-				})
-				.catch(err => console.log(err));
-		}
-	}
-
-	handleLike(tweetId, e) {
-		e.persist();
-
-		let currentProfile = { ...this.state.currentProfile };
-
-		if (e.target.parentElement.value === 'like') {
-			axios({
-				method: 'patch',
-				url: `/api/tweet/${tweetId}`,
-				headers: {
-					Authorization: `Bearer ${localStorage.getItem('userToken')}`
-				},
-				data: {
-					type: 'like',
-					userId: this.props.user.userData._id
-				}
-			})
-				.then(res => {
-					e.target.parentElement.classList.add('liked');
-					currentProfile.tweets.find(tweet => {
-						if (tweet._id === tweetId) {
-							tweet.likers.push(this.props.user.userData._id);
-							tweet.likes++;
-						}
-						return null;
-					});
-					this.setState({ currentProfile: { ...currentProfile } });
-				})
-				.catch(err => console.log(err));
-		} else {
-			axios({
-				method: 'patch',
-				url: `/api/tweet/${tweetId}`,
-				headers: {
-					Authorization: `Bearer ${localStorage.getItem('userToken')}`
-				},
-				data: {
-					type: 'dislike',
-					userId: this.props.user.userData._id
-				}
-			})
-				.then(res => {
-					e.target.parentElement.classList.add('like');
-					currentProfile.tweets.find(tweet => {
-						if (tweet._id === tweetId) {
-							tweet.likers.splice(tweet.likers.indexOf(this.props.user.userData._id));
-							tweet.likes--;
-						}
-						return null;
-					});
-					this.setState({ currentProfile: { ...currentProfile } });
+					this.props.removeFollowing(this.state.currentProfile.name);
 				})
 				.catch(err => console.log(err));
 		}
@@ -230,9 +147,10 @@ class Profile extends Component {
 									<img src={'http://localhost:5000' + this.state.currentProfile.image}
 										alt="profile" />
 									<p>{this.state.currentProfile.name}</p>
-									{(() => {
-										if (this.state.currentProfile.name === this.props.user.userData.name) {
-											return <Form onSubmit={this.handleSubmit}>
+									{
+										(this.state.currentProfile.name === this.props.user.userData.name)
+											?
+											<Form onSubmit={this.handleSubmit}>
 												<FormGroup>
 													<Label htmlFor="userImage">
 														<i className="fa fa-2x fa-camera"></i>
@@ -241,32 +159,24 @@ class Profile extends Component {
 														name="userImage" onChange={this.handleChange} />
 												</FormGroup>
 											</Form>
-										} else if (this.state.following === 'Followed') {
-											return <Button onMouseOver={() => {
-												document.getElementById('follow').innerHTML = 'Unfollow'
-												document.getElementById('follow').className = 'unfollow btn-lg'
-											}}
-												onMouseOut={() => {
-													document.getElementById('follow').innerHTML = 'Followed'
-													document.getElementById('follow').className = 'followed btn-lg'
-												}}
-												value="unfollow" onClick={this.handleFollow} id="follow"
-												className="followed btn-lg">
-												{this.state.following}</Button>
-										} else {
-											return <Button value="follow" onClick={this.handleFollow}
-												className="follow btn-lg">
-												{this.state.following}</Button>
-										}
-									})()
+											: (this.props.user.userData.following.includes(this.state.currentProfile.name))
+												? <Button
+													value="unfollow" 
+													onClick={this.handleFollow}
+													className="followed btn-lg">
+													Following</Button>
+												: <Button
+													value="follow" 
+													onClick={this.handleFollow}
+													className="follow btn-lg">
+													Follow</Button>
 									}
 								</div>
 								<Links name={this.state.currentProfile.name} />
 								<Route key={this.props.match.params.username} exact
 									path="/profile/:username" render={() => (
 										<Tweets
-											currentProfile={this.state.currentProfile}
-											handleLike={this.handleLike} />
+											tweets={this.state.currentProfile.tweets} />
 									)} />
 								<Route path="/profile/:username/following" render={() => (
 									<Following currentProfile={this.state.currentProfile} />
@@ -288,4 +198,7 @@ const mapStateToProps = state => ({
 	user: state.user
 });
 
-export default connect(mapStateToProps, { checkLogin, logoutUser, updateUserImage })(Profile);
+export default connect(mapStateToProps, {
+	checkLogin, logoutUser, updateUserImage,
+	addFollowing, removeFollowing
+})(Profile);

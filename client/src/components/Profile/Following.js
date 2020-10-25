@@ -74,10 +74,6 @@ class Following extends Component {
     }
   }
 
-  componentDidUpdate() {
-    console.log(this.props.user.userData);
-  }
-
   render() {
     return (
       <section>
@@ -86,7 +82,7 @@ class Following extends Component {
             ?
             <Spinner className="loading" color="primary" />
             : (this.state.following.length === 0)
-              ? <h3>No one is following yet!</h3>
+              ? <h3>No one is following "{this.props.currentProfile.name}" yet!</h3>
               : this.state.following.map((profile, i) => {
                 return (
                   <div className="follower-container" key={i}>

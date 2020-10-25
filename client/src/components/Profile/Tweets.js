@@ -7,6 +7,8 @@ import axios from 'axios';
 import Like from '../Like';
 
 class Tweets extends Component {
+  _isMounted = true;
+
   constructor(props) {
     super();
     this.state = {
@@ -17,10 +19,14 @@ class Tweets extends Component {
   }
 
   componentDidMount() {
-    if (this.props.tweets.length === 0) {
-      this.setState({ isLoading: false });
+    this._isMounted = true;
+
+    if (this.props.currentProfile.tweets.length === 0) {
+      if (this._isMounted) {
+        this.setState({ isLoading: false });
+      }
     } else {
-      const tweetsPromises = this.props.tweets.map(tweetId => {
+      const tweetsPromises = this.props.currentProfile.tweets.map(tweetId => {
         return axios.get(`/api/tweet/${tweetId}`);
       });
 
@@ -36,16 +42,20 @@ class Tweets extends Component {
             );
             return res.data;
           });
-
-          this.setState({ isLoading: false, tweets });
+          if (this._isMounted) {
+            this.setState({ isLoading: false, tweets });
+          }
         })
         .catch(err => console.log(err));
     }
   }
 
+  componentWillUnmount() {
+		this._isMounted = false;
+	}
+
   componentDidUpdate(prevProps) {
     if (this.props.user.userData.tweets.length !== prevProps.user.userData.tweets.length) {
-
       this.setState({ isLoading: true });
 
       axios.get(`/api/tweet/${this.props.user.userData.tweets[0]}`)

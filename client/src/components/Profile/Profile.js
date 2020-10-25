@@ -61,7 +61,7 @@ class Profile extends Component {
 			&& this.props.user.userData.name === this.props.match.params.username) {
 			this.setState({ currentProfile: this.props.user.userData });
 		}
-	};
+	}
 
 	handleChange(e) {
 		// Submit form once a file is selected
@@ -161,22 +161,22 @@ class Profile extends Component {
 											</Form>
 											: (this.props.user.userData.following.includes(this.state.currentProfile.name))
 												? <Button
-													value="unfollow" 
+													value="unfollow"
 													onClick={this.handleFollow}
 													className="followed btn-lg">
 													Following</Button>
 												: <Button
-													value="follow" 
+													value="follow"
 													onClick={this.handleFollow}
 													className="follow btn-lg">
 													Follow</Button>
 									}
 								</div>
 								<Links name={this.state.currentProfile.name} />
-								<Route key={this.props.match.params.username} exact
-									path="/profile/:username" render={() => (
+								<Route exact path="/profile/:username"
+									render={() => (
 										<Tweets
-											tweets={this.state.currentProfile.tweets} />
+											currentProfile={this.state.currentProfile} />
 									)} />
 								<Route path="/profile/:username/following" render={() => (
 									<Following currentProfile={this.state.currentProfile} />

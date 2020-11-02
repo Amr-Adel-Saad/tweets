@@ -31,6 +31,10 @@ const UserSchema = new Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'Reply'
 	}],
+	likes: [{
+		type: Array,
+		default: []
+	}],
 	following: {
 		type: Array,
 		default: []

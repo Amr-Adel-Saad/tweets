@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import ReplyModal from './ReplyModal';
 import Replies from './Profile/Replies';
-import { checkLogin, logoutUser } from '../actions/userActions';
+import { checkLogin, logoutUser, removeTweet, addLiked, removeLiked } from '../actions/userActions';
 
 class Tweet extends Component {
   constructor(props) {
@@ -33,6 +33,7 @@ class Tweet extends Component {
         res.data.createdAt = new Date(res.data.createdAt).toLocaleDateString(
           'en-gb',
           {
+            year: 'numeric',
             day: 'numeric',
             month: 'short',
             weekday: 'short',
@@ -69,6 +70,7 @@ class Tweet extends Component {
         }
       })
         .then(res => {
+          this.props.addLiked(tweetId);
           const currentTweet = this.state.currentTweet;
           currentTweet.likes++;
           this.setState({ currentTweet, isLiked: true });
@@ -87,6 +89,7 @@ class Tweet extends Component {
         }
       })
         .then(res => {
+          this.props.removeLiked(tweetId);
           const currentTweet = this.state.currentTweet;
           currentTweet.likes--;
           this.setState({ currentTweet, isLiked: false });
@@ -116,6 +119,7 @@ class Tweet extends Component {
       }
     })
       .then(res => {
+        this.props.removeTweet(this.state.currentTweet._id);
         this.props.history.push(`/profile/${this.props.user.userData.name}`);
       })
       .catch(err => console.log(err));
@@ -190,37 +194,31 @@ class Tweet extends Component {
                 </div>
                 <div className="tweet-main">
                   <p>{this.state.currentTweet.content}</p>
-                  {
-                    (this.state.isLiked)
-                      ? <div className="tweet-reactions">
-                        <ReplyModal
-                          modal={this.state.modal}
-                          reply={this.state.reply}
-                          handleReply={this.handleReply}
-                          toggle={this.toggle}
-                          handleChange={this.handleChange}
-                          tweetId={this.state.currentTweet._id} />
+                  <div className="tweet-reactions">
+                    <ReplyModal
+                      modal={this.state.modal}
+                      reply={this.state.reply}
+                      handleReply={this.handleReply}
+                      toggle={this.toggle}
+                      handleChange={this.handleChange}
+                      tweetId={this.state.currentTweet._id} />
+                    {
+                      (this.state.isLiked)
+                        ?
                         <Button value="dislike"
                           onClick={e => this.handleLike(this.state.currentTweet._id, e)}
                           className="liked btn-lg">
                           <span>liked </span>
                           <i className="fas fa-heart"></i>
                         </Button>
-                      </div>
-                      : <div className="tweet-reactions">
-                        <ReplyModal
-                          modal={this.state.modal}
-                          handleReply={this.handleReply}
-                          toggle={this.toggle}
-                          handleChange={this.handleChange}
-                          tweetId={this.state.currentTweet._id} />
+                        :
                         <Button value="like"
                           onClick={e => this.handleLike(this.state.currentTweet._id, e)}
                           className="like btn-lg">
                           <i className="fas fa-heart"></i>
                         </Button>
-                      </div>
-                  }
+                    }
+                  </div>
                 </div>
                 <section className="tweet-info">
                   <span>{this.state.currentTweet.createdAt}</span>
@@ -245,4 +243,5 @@ const mapStateToProps = state => ({
 });
 
 
-export default connect(mapStateToProps, { checkLogin, logoutUser })(Tweet);
+export default connect(mapStateToProps,
+   { checkLogin, logoutUser, removeTweet, addLiked, removeLiked })(Tweet);

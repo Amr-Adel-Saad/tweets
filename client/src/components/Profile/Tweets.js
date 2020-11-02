@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 import Like from '../Like';
+import { addLiked, removeLiked } from '../../actions/userActions';
 
 class Tweets extends Component {
   _isMounted = true;
@@ -20,13 +21,20 @@ class Tweets extends Component {
 
   componentDidMount() {
     this._isMounted = true;
+    let tweets;
 
-    if (this.props.currentProfile.tweets.length === 0) {
+    if (this.props.user.userData.name === this.props.currentProfile.name) {
+      tweets = this.props.user.userData.tweets;
+    } else {
+      tweets = this.props.currentProfile.tweets;
+    }
+
+    if (tweets.length === 0) {
       if (this._isMounted) {
         this.setState({ isLoading: false });
       }
     } else {
-      const tweetsPromises = this.props.currentProfile.tweets.map(tweetId => {
+      const tweetsPromises = tweets.map(tweetId => {
         return axios.get(`/api/tweet/${tweetId}`);
       });
 
@@ -51,8 +59,8 @@ class Tweets extends Component {
   }
 
   componentWillUnmount() {
-		this._isMounted = false;
-	}
+    this._isMounted = false;
+  }
 
   componentDidUpdate(prevProps) {
     if (this.props.user.userData.tweets.length !== prevProps.user.userData.tweets.length) {
@@ -93,7 +101,7 @@ class Tweets extends Component {
 
   handleLike(tweetId, e) {
     e.persist();
-    let tweets = [...this.state.tweets];
+    const tweets = [...this.state.tweets];
 
     if (e.target.parentElement.value === 'like') {
       axios({
@@ -109,8 +117,9 @@ class Tweets extends Component {
       })
         .then(res => {
           let i = tweets.findIndex(tweet => {
-            return tweet._id = tweetId;
+            return tweet._id === tweetId;
           });
+          this.props.addLiked(tweetId);
           let tweet = { ...tweets[i] };
           tweet.likers.push(this.props.user.userData._id);
           tweet.likes++;
@@ -132,8 +141,9 @@ class Tweets extends Component {
       })
         .then(res => {
           let i = tweets.findIndex(tweet => {
-            return tweet._id = tweetId;
+            return tweet._id === tweetId;
           });
+          this.props.removeLiked(tweetId);
           let tweet = { ...tweets[i] };
           tweet.likers.splice(tweet.likers.indexOf(this.props.user.userData._id), 1);
           tweet.likes--;
@@ -180,4 +190,4 @@ const mapStateToProps = state => ({
   user: state.user
 });
 
-export default connect(mapStateToProps, null)(Tweets);
+export default connect(mapStateToProps, { addLiked, removeLiked })(Tweets);

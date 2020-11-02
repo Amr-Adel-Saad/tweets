@@ -3,8 +3,8 @@ import jwt from 'jsonwebtoken';
 import { push } from 'connected-react-router';
 
 import { LOGIN_USER, LOGOUT_USER, GET_USER, 
-  UPDATE_USER_TWEETS, UPDATE_USER_IMAGE,
-  FOLLOW_USER, UNFOLLOW_USER } from './types';
+  ADD_TWEET, REMOVE_TWEET, ADD_LIKED, REMOVE_LIKED,
+  UPDATE_USER_IMAGE, FOLLOW_USER, UNFOLLOW_USER } from './types';
 
 export const loginUser = (userId) => dispatch => {
   dispatch({
@@ -58,10 +58,31 @@ export const checkLogin = () => dispatch => {
   }
 }
 
-export const updateUserTweets = (tweet) => (dispatch) => {
+export const addTweet = (tweetId) => (dispatch) => {
   dispatch({
-    type: UPDATE_USER_TWEETS,
-    payload: tweet
+    type: ADD_TWEET,
+    payload: tweetId
+  });
+}
+
+export const removeTweet = (tweetId) => (dispatch) => {
+  dispatch({
+    type: REMOVE_TWEET,
+    payload: tweetId
+  });
+}
+
+export const addLiked = (tweetId) => (dispatch) => {
+  dispatch({
+    type: ADD_LIKED,
+    payload: tweetId
+  });
+}
+
+export const removeLiked = (tweetId) => (dispatch) => {
+  dispatch({
+    type: REMOVE_LIKED,
+    payload: tweetId
   });
 }
 

@@ -9,7 +9,7 @@ import Profile from './Profile/Profile';
 import Home from './Home';
 import Tweet from './Tweet';
 
-import { checkLogin, logoutUser, updateUserTweets } from '../actions/userActions';
+import { checkLogin, logoutUser, addTweet } from '../actions/userActions';
 
 class Main extends Component {
   constructor(props) {
@@ -65,7 +65,7 @@ class Main extends Component {
       .then(res => {
         this.toggle();
 
-        this.props.updateUserTweets(res.data._id);
+        this.props.addTweet(res.data._id);
       })
       .catch(err => console.log(err));
   };
@@ -111,4 +111,4 @@ const mapStateToProps = state => ({
   user: state.user
 });
 
-export default connect(mapStateToProps, { checkLogin, logoutUser, updateUserTweets })(Main);
+export default connect(mapStateToProps, { checkLogin, logoutUser, addTweet })(Main);

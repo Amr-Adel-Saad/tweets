@@ -1,12 +1,15 @@
-import { LOGIN_USER, LOGOUT_USER, GET_USER, 
-  UPDATE_USER_TWEETS, UPDATE_USER_IMAGE, FOLLOW_USER, UNFOLLOW_USER } from '../actions/types';
+import {
+  LOGIN_USER, LOGOUT_USER, GET_USER,
+  ADD_TWEET, REMOVE_TWEET, ADD_LIKED, REMOVE_LIKED,
+  UPDATE_USER_IMAGE, FOLLOW_USER, UNFOLLOW_USER
+} from '../actions/types';
 
 const initialState = {
   isLogged: false,
   userData: ''
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case LOGIN_USER:
       return {
@@ -24,7 +27,7 @@ export default function(state = initialState, action) {
         isLogged: false,
         userData: ''
       };
-    case UPDATE_USER_TWEETS:
+    case ADD_TWEET:
       return {
         ...state,
         userData: {
@@ -32,6 +35,38 @@ export default function(state = initialState, action) {
           tweets: [action.payload, ...state.userData.tweets]
         }
       };
+    case REMOVE_TWEET:
+      let tweets = state.userData.tweets;
+      let x = tweets.indexOf(action.payload);
+      tweets.splice(x, 1);
+
+      return {
+        ...state,
+        userData: {
+          ...state.userData,
+          tweets
+        }
+      }
+    case ADD_LIKED:
+      return {
+        ...state,
+        userData: {
+          ...state.userData,
+          likes: [...state.userData.likes, action.payload]
+        }
+      };
+    case REMOVE_LIKED:
+      let likes = state.userData.likes;
+      let y = likes.indexOf(action.payload);
+      likes.splice(y, 1);
+
+      return {
+        ...state,
+        userData: {
+          ...state.userData,
+          likes
+        }
+      }
     case UPDATE_USER_IMAGE:
       return {
         ...state,

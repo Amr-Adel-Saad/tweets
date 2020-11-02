@@ -10,8 +10,6 @@ import {
 } from 'reactstrap';
 import { connect } from 'react-redux';
 
-import { updateUserTweets } from '../actions/userActions';
-
 class TweetModal extends Component {
   constructor(props) {
     super();
@@ -67,4 +65,4 @@ const mapStateToProps = state => ({
   user: state.user
 });
 
-export default connect(mapStateToProps, { updateUserTweets })(TweetModal);
+export default connect(mapStateToProps, null)(TweetModal);

@@ -80,7 +80,15 @@ router.patch('/:tweetId', checkAuth, (req, res) => {
         $addToSet: { 'likers': req.userData.userId },
         $inc: { 'likes': 1 }
       }).exec()
-      .then(() => res.status(200).json({ message: 'Tweet liked' }))
+      .then(() => {
+        User.updateOne({ _id: req.userData.userId }, {
+          $addToSet: { 'likes': req.params.tweetId },
+        }).exec()
+        .then(() => {
+          res.status(200).json({ message: 'Tweet liked' });
+        })
+        .catch(err => res.status(500).json({ error: err }));
+      })
       .catch(err => res.status(500).json({ error: err }));
   } else if (req.body.type === 'dislike') {
     // Dislike tweet
@@ -90,7 +98,15 @@ router.patch('/:tweetId', checkAuth, (req, res) => {
         $pull: { 'likers': req.userData.userId },
         $inc: { 'likes': -1 }
       }).exec()
-      .then(() => res.status(200).json({ message: 'Tweet disliked' }))
+      .then(() => {
+        User.updateOne({ _id: req.userData.userId }, {
+          $pull: { 'likes': req.params.tweetId }
+        }).exec()
+        .then(() => {
+          res.status(200).json({ message: 'Tweet disliked' });
+        })
+        .catch(err => res.status(500).json({ error: err }));
+      })
       .catch(err => res.status(500).json({ error: err }));
   } else {
     res.status(400);

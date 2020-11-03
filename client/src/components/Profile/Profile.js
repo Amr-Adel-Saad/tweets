@@ -91,6 +91,8 @@ class Profile extends Component {
 	}
 
 	handleFollow(e) {
+		let currentProfile = this.state.currentProfile;
+
 		if (e.target.value === 'follow') {
 			axios({
 				method: 'patch',
@@ -104,6 +106,8 @@ class Profile extends Component {
 			})
 				.then(res => {
 					this.props.addFollowing(this.state.currentProfile.name);
+					currentProfile.followers.push(this.props.user.userData.name);
+					this.setState({ currentProfile });
 				})
 				.catch(err => console.log(err));
 		} else {
@@ -119,6 +123,9 @@ class Profile extends Component {
 			})
 				.then(res => {
 					this.props.removeFollowing(this.state.currentProfile.name);
+					let i = currentProfile.followers.indexOf(this.props.user.userData.name);
+					currentProfile.followers.splice(i, 1);
+					this.setState({ currentProfile });
 				})
 				.catch(err => console.log(err));
 		}

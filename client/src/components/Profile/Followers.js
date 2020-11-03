@@ -19,11 +19,6 @@ class Followers extends Component {
   componentDidMount() {
     let followersPromises;
 
-    if (this.props.user.userData.following.indexOf(this.props.currentProfile.name) === -1) {
-      let i = this.props.currentProfile.followers.indexOf(this.props.user.userData.name);
-      this.props.currentProfile.followers.splice(i, 1);
-    }
-
     followersPromises = this.props.currentProfile.followers.map(name => {
       return axios.get(`/api/user/profile/${name}`);
     });

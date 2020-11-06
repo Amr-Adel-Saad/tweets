@@ -22,6 +22,7 @@ const App = () => {
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
             <Route path="/home" component={Main} />
+            <Route path="/explore" component={Main} />
             <Route path="/profile/:username/status/:tweetId" component={Main} />
             <Route path="/profile/:username" component={Main} />
             <Route render={() => 

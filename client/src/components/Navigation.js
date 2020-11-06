@@ -21,8 +21,8 @@ const Navigation = (props) => {
           </NavLink>
         </NavItem>
         <NavItem>
-          <NavLink tag={Link} to="#"><i className="fa fa-fw fa-hashtag"></i>
-            <span>&ensp;Trending</span>
+          <NavLink tag={Link} to="/explore/"><i className="fa fa-fw fa-hashtag"></i>
+            <span>&ensp;Explore</span>
           </NavLink>
         </NavItem>
         <NavItem>

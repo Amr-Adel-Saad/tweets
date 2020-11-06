@@ -128,6 +128,21 @@ router.post('/login', (req, res) => {
 		.catch(err => res.status(500).json({ error: err }));
 });
 
+// Get top followed
+router.get('/topfollowed', (req, res) => {
+  User.find({ followersCount: { $ne: 0 } })
+    .sort({ likes: -1 })
+    .limit(5)
+    .then(users => {
+      if (users) {
+        return res.status(200).json(users);
+      } else {
+        return res.status(204).json({ message: 'Not available' });
+      }
+    })
+    .catch(err => res.status(500).json({ error: err }));
+});
+
 // User profile
 router.get('/:userId', checkAuth, (req, res) => {
 	if (req.params.userId === req.userData.userId) {
@@ -199,7 +214,10 @@ router.patch('/profile/:username', checkAuth, (req, res) => {
 	if (req.body.type === 'follow') {
 		User.updateOne(
 			{ name: req.params.username },
-			{ $addToSet: { followers: req.userData.name } }).exec()
+			{
+				$addToSet: { followers: req.userData.name },
+				$inc: { 'followersCount': 1 }
+			}).exec()
 			.then(() => User.updateOne(
 				{ _id: req.userData.userId },
 				{ $addToSet: { following: req.params.username } }).exec()
@@ -210,7 +228,10 @@ router.patch('/profile/:username', checkAuth, (req, res) => {
 		// Remove follower
 		User.updateOne(
 			{ name: req.params.username },
-			{ $pull: { followers: req.userData.name } }).exec()
+			{
+				$pull: { followers: req.userData.name },
+				$inc: { 'followersCount': -1 }
+			}).exec()
 			.then(() => User.updateOne(
 				{ _id: req.userData.userId },
 				{ $pull: { following: req.params.username } }).exec()

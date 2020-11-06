@@ -42,6 +42,10 @@ const UserSchema = new Schema({
 	followers: {
 		type: Array,
 		default: []
+	},
+	followersCount: {
+		type: Number,
+		default: 0
 	}
 },
 { timestamps: true });

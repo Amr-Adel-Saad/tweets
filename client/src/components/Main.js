@@ -8,6 +8,8 @@ import Navigation from './Navigation';
 import Profile from './Profile/Profile';
 import Home from './Home';
 import Tweet from './Tweet';
+import Explore from './Explore';
+import TopFollowed from './TopFollowed';
 
 import { checkLogin, logoutUser, addTweet } from '../actions/userActions';
 
@@ -99,8 +101,12 @@ class Main extends Component {
               render={(props) => (
                 <Profile {...props} handleLike={this.handleLike} goBack={this.goBack} />
               )} />
+            <Route path="/explore"
+              render={(props) => (
+                <Explore {...props} handleLike={this.handleLike} goBack={this.goBack} />
+              )} />
           </Switch>
-          <div className="col-3">Most liked</div>
+          <TopFollowed />
         </div>
       );
     }

@@ -155,6 +155,11 @@ class Profile extends Component {
 										alt="profile" />
 									<p>{this.state.currentProfile.name}</p>
 									{
+										(this.state.currentProfile.followers.length === 1)
+										? <span>{this.state.currentProfile.followers.length} Follower</span>
+										: <span>{this.state.currentProfile.followers.length} Followers</span>
+									}
+									{
 										(this.state.currentProfile.name === this.props.user.userData.name)
 											?
 											<Form onSubmit={this.handleSubmit}>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { NavLink as RRNavLink } from 'react-router-dom';
 import { Navbar, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
 
 import TweetModal from './TweetModal';
@@ -16,17 +17,19 @@ const Navigation = (props) => {
       </NavbarBrand>
       <Nav>
         <NavItem>
-          <NavLink tag={Link} to="/home/"><i className="fa fa-fw fa-home"></i>
+          <NavLink tag={RRNavLink} to="/home/" activeClassName="selected">
+            <i className="fa fa-fw fa-home"></i>
             <span>&ensp;Home</span>
           </NavLink>
         </NavItem>
         <NavItem>
-          <NavLink tag={Link} to="/explore/"><i className="fa fa-fw fa-hashtag"></i>
+          <NavLink tag={RRNavLink} to="/explore/" activeClassName="selected">
+            <i className="fa fa-fw fa-hashtag"></i>
             <span>&ensp;Explore</span>
           </NavLink>
         </NavItem>
         <NavItem>
-          <NavLink tag={Link} to={`/profile/${props.user.userData.name}/`}>
+          <NavLink tag={RRNavLink} to={`/profile/${props.user.userData.name}/`} activeClassName="selected">
             <i className="fa fa-fw fa-user"></i>
             <span>&ensp;Profile</span>
           </NavLink>

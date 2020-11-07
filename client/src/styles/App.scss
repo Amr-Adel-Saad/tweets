@@ -98,6 +98,7 @@ a, button {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
+    transition: background-color 0s, color 0s;
 
     .btn {
       box-shadow: none;
@@ -189,18 +190,18 @@ a, button {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin: 22px;
+    margin: 14px;
+  }
 
-    h2 {
-      font-size: 18px;
-      font-weight: bolder;
-      margin: 2px 0;
-    }
+  h2 {
+    font-size: 18px;
+    font-weight: bolder;
+    margin: 2px 0;
+  }
 
-    span {
-      font-size: 13px;
-      color: darkgray;
-    }
+  span {
+    font-size: 13px;
+    color: darkgray;
   }
 }
 

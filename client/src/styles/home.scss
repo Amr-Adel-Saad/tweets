@@ -1,5 +1,9 @@
 #home {
+  position: relative;
   min-height: 100vh;
-  margin-left: 283px;
+  margin-left: 22%;
   border-right: 1px solid rgba(255,255,255,.25);
+  display: flex;
+  flex-direction: column;
+  text-align: center;
 }

@@ -128,6 +128,21 @@ router.post('/login', (req, res) => {
 		.catch(err => res.status(500).json({ error: err }));
 });
 
+// Search for people
+router.get('/search/:name', (req, res) => {
+	User.find({
+		name: { $regex: req.params.name, $options: 'gi' }
+	})
+	.then(users => {
+		if (users) {
+			return res.status(200).json(users);
+		} else {
+			return res.status(204).json({ message: 'Not available' });
+		}
+	})
+	.catch(err => res.status(500).json({ error: err }));
+});
+
 // Get top followed
 router.get('/topfollowed', (req, res) => {
   User.find({ followersCount: { $ne: 0 } })

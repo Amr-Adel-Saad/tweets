@@ -34,6 +34,29 @@ router.post('/', checkAuth, (req, res) => {
     .catch(err => res.status(500).json({ error: err }));
 });
 
+// Get most liked
+router.get('/trending', (req, res) => {
+  Tweet.find({ likes: { $ne: 0 } })
+    .sort({ likes: -1 })
+    .limit(10)
+    .populate('author', 'name image')
+    .populate({
+      path: 'replies',
+      populate: {
+        path: 'author',
+        select: 'name image'
+      }
+    })
+    .then(tweets => {
+      if (tweets) {
+        return res.status(200).json(tweets);
+      } else {
+        return res.status(204).json({ message: 'No tweets available' });
+      }
+    })
+    .catch(err => res.status(501).json({ error: err }));
+});
+
 // Get tweet
 router.get('/:tweetId', (req, res) => {
   Tweet.findOne({ _id: req.params.tweetId })
@@ -55,21 +78,6 @@ router.get('/:tweetId', (req, res) => {
     .catch(err => res.status(500).json({ error: err }));
 });
 
-// Get most liked
-router.get('/trending', (req, res) => {
-  Tweet.find()
-    .sort({ likes: -1 })
-    .limit(10)
-    .then(tweets => {
-      if (tweets) {
-        return res.status(200).json(tweets);
-      } else {
-        return res.status(204).json({ message: 'No tweets available' });
-      }
-    })
-    .catch(err => res.status(500).json({ error: err }));
-});
-
 // Patch tweet
 router.patch('/:tweetId', checkAuth, (req, res) => {
   // Like tweet
@@ -84,10 +92,10 @@ router.patch('/:tweetId', checkAuth, (req, res) => {
         User.updateOne({ _id: req.userData.userId }, {
           $addToSet: { 'likes': req.params.tweetId },
         }).exec()
-        .then(() => {
-          res.status(200).json({ message: 'Tweet liked' });
-        })
-        .catch(err => res.status(500).json({ error: err }));
+          .then(() => {
+            res.status(200).json({ message: 'Tweet liked' });
+          })
+          .catch(err => res.status(500).json({ error: err }));
       })
       .catch(err => res.status(500).json({ error: err }));
   } else if (req.body.type === 'dislike') {
@@ -102,10 +110,10 @@ router.patch('/:tweetId', checkAuth, (req, res) => {
         User.updateOne({ _id: req.userData.userId }, {
           $pull: { 'likes': req.params.tweetId }
         }).exec()
-        .then(() => {
-          res.status(200).json({ message: 'Tweet disliked' });
-        })
-        .catch(err => res.status(500).json({ error: err }));
+          .then(() => {
+            res.status(200).json({ message: 'Tweet disliked' });
+          })
+          .catch(err => res.status(500).json({ error: err }));
       })
       .catch(err => res.status(500).json({ error: err }));
   } else {

@@ -102,11 +102,11 @@ class Login extends Component {
 							<FormGroup>
 								<Input
 									type="text" name="name" onChange={this.handleChange}
-									value={this.state.name} placeholder="Username" autoFocus />
+									value={this.state.name} placeholder="Username" autoFocus autoComplete="off"/>
 							</FormGroup>
 							<FormGroup>
 								<Input type="password" name="password" onChange={this.handleChange}
-									value={this.state.password} placeholder="Password" />
+									value={this.state.password} placeholder="Password" autoComplete="off"/>
 							</FormGroup>
 							<Button color="primary" size="md" >
 								{(this.state.iconLoading) ?

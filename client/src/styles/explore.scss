@@ -1,5 +1,50 @@
 #explore {
+  position: relative;
   min-height: 100vh;
-  margin-left: 283px;
+  margin-left: 22%;
   border-right: 1px solid rgba(255,255,255,.25);
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+
+  form {
+    position: relative;
+    width: 85%;
+    margin: auto;
+
+    i {
+      position: absolute;
+      color: rgb(136, 153, 166);
+      top: 11px;
+      bottom: 12px;
+      left: 18px;
+    }
+  }
+
+  .form-group {
+    margin: 0 auto;
+  }
+
+  input {
+    box-shadow: none;
+    background-color: rgb(30, 45, 58);
+    border: 1px solid transparent;
+    border-radius: 20px;
+    padding-left: 50px;
+    color: white;
+    transition: border 0s;
+  }
+
+  input:focus {
+    border: 1px solid dodgerblue;
+  }
+
+  input:focus + i {
+    color: dodgerblue;
+  }
+
+  h3 {
+    text-align: center;
+    margin-top: 30px;
+  }
 }

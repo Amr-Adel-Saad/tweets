@@ -64,7 +64,7 @@ class Signup extends Component {
 			<main className="credentials">
 				<div className="form-container">
 					<h1><i className="fa fa-twitter"></i> tweets</h1>
-					<Form onSubmit={this.handleSubmit} noValidate >
+					<Form onSubmit={this.handleSubmit} noValidate>
 						{this.state.errors.map((error, i) =>
 							<Alert key={i} isOpen={this.state.alert} color="danger">
 								{error + '!'}
@@ -72,19 +72,19 @@ class Signup extends Component {
 						}
 						<FormGroup>
 							<Input type="text" name="name" onChange={this.handleChange} 
-								value={this.state.name} placeholder="Username" autoFocus />
+								value={this.state.name} placeholder="Username" autoFocus autoComplete="off"/>
 						</FormGroup>
 						<FormGroup>
 							<Input type="email" name="email" onChange={this.handleChange} 
-								value={this.state.email} placeholder="Email" />
+								value={this.state.email} placeholder="Email" autoComplete="off"/>
 						</FormGroup>
 						<FormGroup>
 							<Input type="password" name="password" onChange={this.handleChange} 
-								value={this.state.password} placeholder="Password" />
+								value={this.state.password} placeholder="Password" autoComplete="off"/>
 						</FormGroup>
 						<FormGroup>
 							<Input type="password" name="password2" onChange={this.handleChange} 
-								value={this.state.password2} placeholder="Confirm Password" />
+								value={this.state.password2} placeholder="Confirm Password" autoComplete="off"/>
 						</FormGroup>
 						<Button color="primary" size="md">
 							{(this.state.isLoading) ?

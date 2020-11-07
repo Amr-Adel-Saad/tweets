@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button } from 'reactstrap';
 import { connect } from 'react-redux';
 
 import { logoutUser } from '../actions/userActions';
@@ -12,7 +13,14 @@ class Home extends Component {
 	render() {
 		return (
 			<main id="home" className="col-5-5">
-				<div>Home</div>
+				<div className="back-button-div">
+          <Button onClick={this.props.goBack} className="back-button">
+            <i className="fas fa-md fa-arrow-left"></i>
+          </Button>
+          <div>
+            <h2>Home</h2>
+          </div>
+        </div>
 			</main>
 		);
 	}

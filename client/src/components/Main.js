@@ -65,7 +65,9 @@ class Main extends Component {
       }
     })
       .then(res => {
-        this.toggle();
+        if (this.state.tweetModal === true) {
+          this.toggle();
+        }
 
         this.props.addTweet(res.data._id);
       })
@@ -91,7 +93,7 @@ class Main extends Component {
           <Switch>
             <Route path="/home"
               render={(props) => (
-                <Home {...props} goBack={this.goBack} />
+                <Home {...props} handleTweet={this.handleTweet} goBack={this.goBack} />
               )} />
             <Route path="/profile/:username/status/:tweetId"
               render={(props) => (

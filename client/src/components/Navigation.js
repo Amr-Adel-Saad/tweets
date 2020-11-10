@@ -13,7 +13,7 @@ const Navigation = (props) => {
   return (
     <Navbar className="col-2-5" id="main-navbar">
       <NavbarBrand tag={Link} to="/home">
-        <i className="fa fa-fw fa-2x fa-twitter"></i>
+        <i className="fa fa-fw fa-twitter"></i>
       </NavbarBrand>
       <Nav>
         <NavItem>

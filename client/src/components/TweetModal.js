@@ -21,6 +21,9 @@ class TweetModal extends Component {
 
   handleChange(e) {
     this.setState({ tweet: e.target.value });
+
+    e.target.style.height = 'auto';
+		e.target.style.height = e.target.scrollHeight + 'px';
   };
 
   render() {

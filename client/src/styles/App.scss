@@ -208,10 +208,6 @@ a, button {
 .modal {
   background-color: rgba(213, 234, 255, 0.2);
 
-  .modal-dialog {
-    width: 500px;
-  }
-
   .modal-content {
     border-radius: 16px;
     background-color: $back-blue;
@@ -244,8 +240,8 @@ a, button {
   .modal-body {
     display: flex;
     justify-content: space-between;
-    min-height: 300px;
     padding: 14px;
+    padding-bottom: 0;
   }
 
   img {
@@ -265,7 +261,7 @@ a, button {
       justify-content: space-between;
 
       textarea {
-        padding-right: 0;
+        width: 95%;
         font-size: 18px;
         background-color: $back-blue;
         color: white;
@@ -273,12 +269,15 @@ a, button {
         border: none;
         border-bottom: 1px solid rgba(255,255,255,.25);
         box-shadow: none;
-        min-height: 210px;
+        min-height: 160px;
         resize: none;
+        overflow: hidden;
+        padding: 10px auto;
+        margin: auto 14px;
       }
     
       button {
-        margin-bottom: 6px;
+        margin: 10px;
         font-weight: bold;
         width: 100px;
         align-self: flex-end;

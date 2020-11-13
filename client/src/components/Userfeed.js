@@ -4,66 +4,59 @@ import { Spinner } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-import Like from '../Like';
-import { addLiked, removeLiked } from '../../actions/userActions';
+import Like from './Like';
+import { addLiked, removeLiked } from '../actions/userActions';
 
-class Tweets extends Component {
-  _isMounted = true;
-
+class Userfeed extends Component {
   constructor(props) {
     super();
     this.state = {
       isLoading: true,
-      tweets: []
-    };
+      userfeed: []
+    }
     this.handleLike = this.handleLike.bind(this);
   }
 
   componentDidMount() {
-    this._isMounted = true;
-    let tweets;
-
-    if (this.props.user.userData.name === this.props.currentProfile.name) {
-      tweets = this.props.user.userData.tweets;
-    } else {
-      tweets = this.props.currentProfile.tweets;
-    }
-
-    if (tweets.length === 0) {
-      if (this._isMounted) {
-        this.setState({ isLoading: false });
-      }
-    } else {
-      const tweetsPromises = tweets.map(tweetId => {
-        return axios.get(`/api/tweet/${tweetId}`);
-      });
-
-      Promise.all(tweetsPromises)
-        .then(responses => {
-          const tweets = responses.map(res => {
-            res.data.createdAt = new Date(res.data.createdAt).toLocaleDateString(
-              'en-gb',
-              {
-                day: 'numeric',
-                month: 'short'
-              }
-            );
-            return res.data;
+    if (this.props.user.userData !== '') {
+      axios({
+        method: 'get',
+        url: '/api/user/userfeed',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('userToken')}`
+        }
+      })
+        .then(res => {
+          const tweetsPromises = res.data.map(tweetId => {
+            return axios.get(`/api/tweet/${tweetId}`);
           });
-          if (this._isMounted) {
-            this.setState({ isLoading: false, tweets });
-          }
+
+          Promise.all(tweetsPromises)
+            .then(responses => {
+              responses.sort((a, b) => new Date(b.data.createdAt) - new Date(a.data.createdAt));
+
+              const tweets = responses.map(res => {
+                res.data.createdAt = new Date(res.data.createdAt).toLocaleDateString(
+                  'en-gb',
+                  {
+                    day: 'numeric',
+                    month: 'short'
+                  }
+                );
+                return res.data;
+              });
+
+              this.setState({ isLoading: false, userfeed: tweets });
+            })
+            .catch(err => console.log(err));
         })
         .catch(err => console.log(err));
     }
   }
 
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
-
   componentDidUpdate(prevProps) {
-    if (this.props.user.userData.tweets.length !== prevProps.user.userData.tweets.length) {
+    if (prevProps.user.userData !== ''
+      && prevProps.user.userData.tweets !== this.props.user.userData.tweets) {
       this.setState({ isLoading: true });
 
       axios.get(`/api/tweet/${this.props.user.userData.tweets[0]}`)
@@ -78,30 +71,51 @@ class Tweets extends Component {
 
           this.setState({
             isLoading: false,
-            tweets: [
-              res.data,
-              ...this.state.tweets
-            ]
+            userfeed: [res.data, ...this.state.userfeed]
           });
         })
         .catch(err => console.log(err));
     }
 
-    if (this.props.user.userData.image !== prevProps.user.userData.image) {
-      let tweets = this.state.tweets;
+    if (prevProps.user.userData === '' && this.props.user.userData !== '') {
+      axios({
+        method: 'get',
+        url: '/api/user/userfeed',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('userToken')}`
+        }
+      })
+        .then(res => {
+          const tweetsPromises = res.data.map(tweetId => {
+            return axios.get(`/api/tweet/${tweetId}`);
+          });
 
-      tweets.map(tweet => {
-        tweet.author.image = this.props.user.userData.image;
-        return tweet;
-      });
+          Promise.all(tweetsPromises)
+            .then(responses => {
+              responses.sort((a, b) => new Date(b.data.createdAt) - new Date(a.data.createdAt));
 
-      this.setState({ tweets });
+              const tweets = responses.map(res => {
+                res.data.createdAt = new Date(res.data.createdAt).toLocaleDateString(
+                  'en-gb',
+                  {
+                    day: 'numeric',
+                    month: 'short'
+                  }
+                );
+                return res.data;
+              });
+
+              this.setState({ isLoading: false, userfeed: tweets });
+            })
+            .catch(err => console.log(err));
+        })
+        .catch(err => console.log(err));
     }
   }
 
   handleLike(tweetId, e) {
     e.persist();
-    const tweets = [...this.state.tweets];
+    const tweets = [...this.state.userfeed];
 
     if (e.target.parentElement.value === 'like') {
       axios({
@@ -124,7 +138,7 @@ class Tweets extends Component {
           tweet.likers.push(this.props.user.userData._id);
           tweet.likes++;
           tweets[i] = tweet;
-          this.setState({ tweets });
+          this.setState({ userfeed: tweets });
         })
         .catch(err => console.log(err));
     } else {
@@ -148,7 +162,7 @@ class Tweets extends Component {
           tweet.likers.splice(tweet.likers.indexOf(this.props.user.userData._id), 1);
           tweet.likes--;
           tweets[i] = tweet;
-          this.setState({ tweets });
+          this.setState({ userfeed: tweets });
         })
         .catch(err => console.log(err));
     }
@@ -156,13 +170,13 @@ class Tweets extends Component {
 
   render() {
     return (
-      <section>
+      <section id="userfeed">
         { (this.state.isLoading)
           ?
           <Spinner className="loading" color="primary" />
-          : (this.state.tweets.length === 0)
-            ? <h3>No tweets yet!</h3>
-            : this.state.tweets.map((tweet, i) => {
+          : (this.state.userfeed.length === 0)
+            ? <h3>No tweets available!</h3>
+            : this.state.userfeed.map((tweet, i) => {
               return (
                 <article className="tweet-container" key={i}>
                   <img src={tweet.author.image} alt="current-profile" />
@@ -190,4 +204,4 @@ const mapStateToProps = state => ({
   user: state.user
 });
 
-export default connect(mapStateToProps, { addLiked, removeLiked })(Tweets);
+export default connect(mapStateToProps, { addLiked, removeLiked })(Userfeed);

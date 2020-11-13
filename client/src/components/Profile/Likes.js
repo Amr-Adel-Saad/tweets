@@ -47,7 +47,10 @@ class Likes extends Component {
           });
           this.setState({ isLoading: false, likes });
         })
-        .catch(err => console.log(err));
+        .catch(err =>  {
+          this.setState({ isLoading: 'false' });
+          console.log(err);
+        });
     }
   }
 
@@ -129,7 +132,7 @@ class Likes extends Component {
             ? <h3>No liked tweets yet!</h3>
             : this.state.likes.map((tweet, i) => {
               return (
-                <div className="tweet-container" key={i}>
+                <article className="tweet-container" key={i}>
                   <img src={tweet.author.image} alt="current-profile" />
                   <div className="tweet-main">
                     <div className="name-date">
@@ -142,7 +145,7 @@ class Likes extends Component {
                   <Link to={`/profile/${tweet.author.name}/status/${tweet._id}`}>
                     <span></span>
                   </Link>
-                </div>
+                </article>
               );
             })
         }

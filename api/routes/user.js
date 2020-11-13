@@ -5,6 +5,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
+const axios = require('axios');
 
 // Configure upload destination
 const storage = multer.diskStorage({
@@ -133,29 +134,55 @@ router.get('/search/:name', (req, res) => {
 	User.find({
 		name: { $regex: req.params.name, $options: 'gi' }
 	})
-	.then(users => {
-		if (users) {
-			return res.status(200).json(users);
-		} else {
-			return res.status(204).json({ message: 'Not available' });
-		}
-	})
-	.catch(err => res.status(500).json({ error: err }));
+		.then(users => {
+			if (users) {
+				return res.status(200).json(users);
+			} else {
+				return res.status(204).json({ message: 'Not available' });
+			}
+		})
+		.catch(err => res.status(500).json({ error: err }));
 });
 
 // Get top followed
 router.get('/topfollowed', (req, res) => {
-  User.find({ followersCount: { $ne: 0 } })
-    .sort({ likes: -1 })
-    .limit(5)
-    .then(users => {
-      if (users) {
-        return res.status(200).json(users);
-      } else {
-        return res.status(204).json({ message: 'Not available' });
-      }
-    })
-    .catch(err => res.status(500).json({ error: err }));
+	User.find({ followersCount: { $ne: 0 } })
+		.sort({ likes: -1 })
+		.limit(5)
+		.then(users => {
+			if (users) {
+				return res.status(200).json(users);
+			} else {
+				return res.status(204).json({ message: 'Not available' });
+			}
+		})
+		.catch(err => res.status(500).json({ error: err }));
+});
+
+// Userfeed
+router.get('/userfeed', checkAuth, (req, res) => {
+	User.findById(req.userData.userId).exec()
+		.then(user => {
+			const following = user.following;
+
+			const followingPromises = following.map(name => {
+				return axios.get(`http://localhost:5000/api/user/profile/${name}`);
+			});
+
+			Promise.all(followingPromises)
+				.then(responses => {
+					const tweets = responses.map(res => {
+						return res.data.tweets.splice(0, 3);
+					});
+
+					let userTweets = user.tweets.splice(0, 3);
+					tweets.push(...userTweets);
+
+					res.status(200).json(tweets);
+				})
+				.catch(err => res.status(500).json({ error: err }));
+		})
+		.catch(err => res.status(500).json({ error: err }));
 });
 
 // User profile

@@ -6,7 +6,7 @@ import {
 } from 'reactstrap';
 import { connect } from 'react-redux';
 
-class LogoutModal extends Component {
+class DeleteTweetModal extends Component {
   constructor(props) {
     super();
     this.state = {
@@ -24,9 +24,9 @@ class LogoutModal extends Component {
   render() {
     return (
       <>
-        <Button style={{ margin: "15px auto" }} color="primary" onClick={this.toggle}>
-          <i className="fa fa-fw fa-sign-out"></i>
-          <span> Log out</span>
+        <Button id="delete-tweet"
+          onClick={this.toggle} className="btn-sm btn-danger">
+          <i className="far fa-trash-alt"></i>
         </Button>
 
         <Modal
@@ -35,11 +35,11 @@ class LogoutModal extends Component {
           className="delete-modal"
         >
           <ModalBody>
-            <h2>Log out of Tweets ?</h2>
+            <h2>Delete Tweet ?</h2>
             <div>
               <Button onClick={this.toggle} >Cancel</Button>
-              <Button onClick={this.props.handleLogout} color="primary">
-                Log out
+              <Button onClick={e => this.props.deleteTweet(this.props.tweetId, e)} color="danger">
+                Delete
               </Button>
             </div>
           </ModalBody>
@@ -53,4 +53,4 @@ const mapStateToProps = state => ({
   user: state.user
 });
 
-export default connect(mapStateToProps, null)(LogoutModal);
+export default connect(mapStateToProps, null)(DeleteTweetModal);

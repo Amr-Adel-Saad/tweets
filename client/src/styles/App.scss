@@ -212,6 +212,7 @@ a, button {
     border-radius: 16px;
     background-color: $back-blue;
     margin: auto;
+    width: 520;
   }
 
   .modal-header {
@@ -223,7 +224,7 @@ a, button {
   }
 
   .close {
-    padding: 1px 9px 4px 9px;
+    padding: 0 9px 3px 10px;
     font-weight: lighter;
     text-shadow: none;
     outline: none;
@@ -269,7 +270,7 @@ a, button {
         border: none;
         border-bottom: 1px solid rgba(255,255,255,.25);
         box-shadow: none;
-        min-height: 160px;
+        min-height: 180px;
         resize: none;
         overflow: hidden;
         padding: 10px auto;
@@ -289,6 +290,9 @@ a, button {
 
 .delete-modal {
   font-weight: normal;
+  display: flex;
+  align-items: center;
+  height: 70vh;
 
   .modal-content {
     width: 400px;
@@ -308,7 +312,7 @@ a, button {
   }
 
   .btn {
-    margin: auto 20px
+    margin: auto 20px;
   }
 }
 
@@ -397,6 +401,27 @@ aside {
   top: 50%;
   bottom: 50%;
   margin: auto;
+}
+
+.flash-tweet {
+  font-size: 14px;
+  z-index: 5;
+  position: fixed;
+  left: 0; 
+  right: 0;
+  top: 90%;
+  bottom: 10%;
+  margin: auto;
+  width: 160px;
+  text-align: center;
+
+  .alert {
+    padding: 8px;
+    margin: 0;
+    background-color: $light-hover;
+    color: white;
+    border: none;
+  }
 }
 
 #notfound {

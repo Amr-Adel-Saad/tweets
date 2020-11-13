@@ -85,7 +85,7 @@ class Following extends Component {
               ? <h3>"{this.props.currentProfile.name}" doesn't follow anyone yet!</h3>
               : this.state.following.map((profile, i) => {
                 return (
-                  <div className="follower-container" key={i}>
+                  <article className="follower-container" key={i}>
                     <div>
                       <img src={profile.image} alt={profile.name} />
                       <span> {profile.name}</span>
@@ -108,7 +108,7 @@ class Following extends Component {
                     <Link to={`/profile/${profile.name}`}>
                       <span></span>
                     </Link>
-                  </div>
+                  </article>
                 );
               })
         }

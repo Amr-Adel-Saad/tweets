@@ -7,6 +7,10 @@
   flex-direction: column;
   text-align: center;
 
+  h3 {
+    margin-top: 30px;
+  }
+
   #new-tweet {
     display: flex;
     justify-content: space-between;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
-import { Spinner } from 'reactstrap';
+import { Spinner, Alert } from 'reactstrap';
 import axios from 'axios';
 
 import Navigation from './Navigation';
@@ -11,19 +11,23 @@ import Tweet from './Tweet';
 import Explore from './Explore';
 import TopFollowed from './TopFollowed';
 
-import { checkLogin, logoutUser, addTweet } from '../actions/userActions';
+import { checkLogin, logoutUser, addTweet, removeTweet, removeLiked } from '../actions/userActions';
 
 class Main extends Component {
   constructor(props) {
     super();
     this.state = {
       isLoading: true,
-      tweetModal: false
+      tweetModal: false,
+      tweetSent: false,
+      tweetDeleted: false
     }
+
     this.handleLogout = this.handleLogout.bind(this);
     this.goBack = this.goBack.bind(this);
     this.toggle = this.toggle.bind(this);
     this.handleTweet = this.handleTweet.bind(this);
+    this.deleteTweet = this.deleteTweet.bind(this);
   }
 
   componentDidMount() {
@@ -34,9 +38,21 @@ class Main extends Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (prevProps.user.isLogged === false && this.props.user.isLogged) {
       this.setState({ isLoading: false });
+    }
+
+    if (prevState.tweetSent === false && this.state.tweetSent === true) {
+      setTimeout(() => {
+        this.setState({ tweetSent: false });
+      }, 3000);
+    }
+
+    if (prevState.tweetDeleted === false && this.state.tweetDeleted === true) {
+      setTimeout(() => {
+        this.setState({ tweetDeleted: false });
+      }, 3000);
     }
   }
 
@@ -50,9 +66,10 @@ class Main extends Component {
     this.props.history.push('/login');
   }
 
-
   handleTweet(tweet, e) {
+    console.log(this.state.tweetSent);
     e.preventDefault();
+    e.target.querySelector('textarea').value = '';
 
     axios({
       method: 'post',
@@ -69,10 +86,32 @@ class Main extends Component {
           this.toggle();
         }
 
+        this.setState({ tweetSent: true });
         this.props.addTweet(res.data._id);
       })
       .catch(err => console.log(err));
   };
+
+  deleteTweet(tweetId, e) {
+    console.log(this.state.tweetDeleted);
+    axios({
+      method: 'delete',
+      url: `/api/tweet/${tweetId}`,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('userToken')}`
+      },
+      data: {
+        userId: this.props.user.userData._id
+      }
+    })
+      .then(res => {
+        this.props.removeLiked(tweetId);
+        this.props.removeTweet(tweetId);
+        this.setState({ tweetDeleted: true });
+        this.props.history.push(`/profile/${this.props.user.userData.name}`);
+      })
+      .catch(err => console.log(err));
+  }
 
   toggle() {
     this.setState({
@@ -93,11 +132,11 @@ class Main extends Component {
           <Switch>
             <Route path="/home"
               render={(props) => (
-                <Home {...props} handleTweet={this.handleTweet} goBack={this.goBack} />
+                <Home {...props} userData={this.props.user.userData} handleTweet={this.handleTweet} goBack={this.goBack} />
               )} />
             <Route path="/profile/:username/status/:tweetId"
               render={(props) => (
-                <Tweet {...props} goBack={this.goBack} />
+                <Tweet {...props} deleteTweet={this.deleteTweet} goBack={this.goBack} />
               )} />
             <Route path="/profile/:username"
               render={(props) => (
@@ -109,6 +148,26 @@ class Main extends Component {
               )} />
           </Switch>
           <TopFollowed />
+          {
+            (this.state.tweetSent)
+              ?
+              <div className="flash-tweet">
+                <Alert>
+                  Tweet Sent!
+                </Alert>
+              </div>
+              : null
+          }
+          {
+            (this.state.tweetDeleted)
+              ?
+              <div className="flash-tweet">
+                <Alert>
+                  Tweet Deleted!
+                </Alert>
+              </div>
+              : null
+          }
         </div>
       );
     }
@@ -119,4 +178,7 @@ const mapStateToProps = state => ({
   user: state.user
 });
 
-export default connect(mapStateToProps, { checkLogin, logoutUser, addTweet })(Main);
+export default connect(mapStateToProps, {
+  checkLogin, logoutUser, addTweet,
+  removeTweet, removeLiked
+})(Main);

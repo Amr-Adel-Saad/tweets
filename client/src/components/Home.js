@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, Form, FormGroup, Input } from 'reactstrap';
 import { connect } from 'react-redux';
 
+import Userfeed from './Userfeed';
 import { logoutUser } from '../actions/userActions';
 import { checkLogin } from '../actions/userActions';
 
@@ -49,6 +50,7 @@ class Home extends Component {
 						</FormGroup>
 					</Form>
 				</section>
+				<Userfeed />
 			</main>
 		);
 	}

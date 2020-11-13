@@ -79,7 +79,7 @@ class Followers extends Component {
               ? <h3>No followers yet!</h3>
               : this.state.followers.map((profile, i) => {
                 return (
-                  <div className="follower-container" key={i}>
+                  <article className="follower-container" key={i}>
                     <div>
                       <img src={profile.image} alt={profile.name} />
                       <span> {profile.name}</span>
@@ -102,7 +102,7 @@ class Followers extends Component {
                     <Link to={`/profile/${profile.name}`}>
                       <span></span>
                     </Link>
-                  </div>
+                  </article>
                 );
               })
         }

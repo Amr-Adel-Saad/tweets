@@ -163,13 +163,21 @@ router.delete('/:tweetId', checkAuth, (req, res) => {
             tweets: req.params.tweetId
           }
         }).exec()
-          .then(() => res.status(200).json({ message: 'Tweet deleted' }))
-          .catch(err => res.status(500).json({ error: err }))
+          .then(() => {
+            User.updateMany({
+              $pull: {
+                likes: req.params.tweetId
+              }
+            }).exec()
+              .then(() => res.status(200).json({ message: 'Tweet deleted' }))
+            .catch (err => res.status(500).json({ error: err }));
       })
       .catch(err => res.status(500).json({ error: err }));
+  })
+  .catch(err => res.status(500).json({ error: err }));
   } else {
-    res.status(401).json({ message: 'Auth failed' });
-  }
+  res.status(401).json({ message: 'Auth failed' });
+}
 });
 
 module.exports = router;

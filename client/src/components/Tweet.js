@@ -6,6 +6,7 @@ import axios from 'axios';
 import ReplyModal from './ReplyModal';
 import Replies from './Profile/Replies';
 import { checkLogin, logoutUser, removeTweet, addLiked, removeLiked } from '../actions/userActions';
+import DeleteTweetModal from './DeleteTweetModal';
 
 class Tweet extends Component {
   constructor(props) {
@@ -20,7 +21,6 @@ class Tweet extends Component {
     this.handleLike = this.handleLike.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
     this.goBack = this.goBack.bind(this);
-    this.deleteTweet = this.deleteTweet.bind(this);
     this.handleReply = this.handleReply.bind(this);
     this.toggle = this.toggle.bind(this);
   }
@@ -107,24 +107,6 @@ class Tweet extends Component {
     this.props.history.goBack();
   }
 
-  deleteTweet() {
-    axios({
-      method: 'delete',
-      url: `/api/tweet/${this.state.currentTweet._id}`,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('userToken')}`
-      },
-      data: {
-        userId: this.props.user.userData._id
-      }
-    })
-      .then(res => {
-        this.props.removeTweet(this.state.currentTweet._id);
-        this.props.history.push(`/profile/${this.props.user.userData.name}`);
-      })
-      .catch(err => console.log(err));
-  }
-
   handleReply(reply, e) {
     e.preventDefault();
 
@@ -177,13 +159,12 @@ class Tweet extends Component {
                   <h2>Tweet</h2>
                 </div>
               </div>
-              <section className="tweet-container">
+              <article className="tweet-container">
                 {
                   (this.props.user.userData._id === this.state.currentTweet.author._id)
-                    ? <Button id="delete-tweet"
-                      onClick={this.deleteTweet} className="btn-sm btn-danger">
-                      <i className="far fa-trash-alt"></i>
-                    </Button>
+                    ? 
+                    <DeleteTweetModal tweetId={this.state.currentTweet._id} 
+                      deleteTweet={this.props.deleteTweet} />
                     : null
                 }
                 <div>
@@ -225,7 +206,7 @@ class Tweet extends Component {
                   <span>{this.state.currentTweet.likes} Likes</span>
                   <span>{this.state.currentTweet.replies.length} replies</span>
                 </section>
-              </section>
+              </article>
               {
                 (this.state.currentTweet.replies !== '')
                   ? <Replies currentTweet={this.state.currentTweet} />

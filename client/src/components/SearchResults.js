@@ -26,7 +26,7 @@ class Followers extends Component {
         if (this._isMounted) {
           this.setState({
             isLoading: false,
-            people: res.data
+            people: res.data.splice(0, 15)
           });
         }
       })

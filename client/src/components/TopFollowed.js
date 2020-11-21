@@ -62,7 +62,7 @@ class TopFollowed extends Component {
 
   render() {
     return (
-      <aside className="col-3 p-0">
+      <aside className="p-0 col-xl-5 col-lg-5">
         <section id="top-followed">
           <h3>Top Followed</h3>
           {

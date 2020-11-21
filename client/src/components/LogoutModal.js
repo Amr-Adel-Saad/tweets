@@ -24,7 +24,7 @@ class LogoutModal extends Component {
   render() {
     return (
       <>
-        <Button style={{ margin: "15px auto" }} color="primary" onClick={this.toggle}>
+        <Button id="log-out" color="primary" onClick={this.toggle}>
           <i className="fa fa-fw fa-sign-out"></i>
           <span> Log out</span>
         </Button>

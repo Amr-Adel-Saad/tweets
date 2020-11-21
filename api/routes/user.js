@@ -116,7 +116,7 @@ router.post('/login', (req, res) => {
 						// Log in user and send token
 						const token = jwt.sign({ name: user.name, userId: user._id }
 							, process.env.JWT_KEY,
-							{ expiresIn: '24h' });
+							{ expiresIn: '7d' });
 
 						return res.status(200).json({ message: 'Auth successful', token, user });
 					}
@@ -177,7 +177,6 @@ router.get('/userfeed', checkAuth, (req, res) => {
 
 					let userTweets = user.tweets.splice(0, 3);
 					tweets.push(...userTweets);
-
 					res.status(200).json(tweets);
 				})
 				.catch(err => res.status(500).json({ error: err }));

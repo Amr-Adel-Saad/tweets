@@ -110,7 +110,7 @@ class Explore extends Component {
 
   render() {
     return (
-      <main id="explore" className="col-5-5">
+      <main id="explore" className="p-0 col-xl-9 col-lg-10 col-md-11 col-sm-14 col-19">
         <div style={{ height: "65px" }} className="back-button-div">
           <Button onClick={this.props.goBack} className="back-button">
             <i className="fas fa-md fa-arrow-left"></i>
@@ -153,7 +153,7 @@ class Explore extends Component {
                         <p>{tweet.content}</p>
                         <Like tweet={tweet} handleLike={this.handleLike} />
                       </div>
-                      <Link to={`/profile/${tweet.author.name}/status/${tweet._id}`}>
+                      <Link className="tweet-background" to={`/profile/${tweet.author.name}/status/${tweet._id}`}>
                         <span></span>
                       </Link>
                     </div>

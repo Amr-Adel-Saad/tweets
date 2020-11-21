@@ -46,13 +46,13 @@ class Main extends Component {
     if (prevState.tweetSent === false && this.state.tweetSent === true) {
       setTimeout(() => {
         this.setState({ tweetSent: false });
-      }, 3000);
+      }, 4000);
     }
 
     if (prevState.tweetDeleted === false && this.state.tweetDeleted === true) {
       setTimeout(() => {
         this.setState({ tweetDeleted: false });
-      }, 3000);
+      }, 4000);
     }
   }
 
@@ -67,7 +67,6 @@ class Main extends Component {
   }
 
   handleTweet(tweet, e) {
-    console.log(this.state.tweetSent);
     e.preventDefault();
     e.target.querySelector('textarea').value = '';
 
@@ -126,7 +125,7 @@ class Main extends Component {
       );
     } else {
       return (
-        <div className="row">
+        <div className="row p-0 justify-content-center">
           <Navigation handleLogout={this.handleLogout} toggle={this.toggle}
             handleTweet={this.handleTweet} tweetModal={this.state.tweetModal} />
           <Switch>

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Button, Spinner } from 'reactstrap';
 import axios from 'axios';
@@ -144,7 +145,7 @@ class Tweet extends Component {
 
   render() {
     return (
-      <main id="current-tweet" className="col-5-5">
+      <main id="current-tweet" className="p-0 col-xl-9 col-lg-10 col-md-11 col-sm-14 col-19">
         { (this.state.isLoading)
           ? <Spinner className="loading" color="primary" />
           : (this.state.currentTweet === '')
@@ -162,16 +163,20 @@ class Tweet extends Component {
               <article className="tweet-container">
                 {
                   (this.props.user.userData._id === this.state.currentTweet.author._id)
-                    ? 
-                    <DeleteTweetModal tweetId={this.state.currentTweet._id} 
+                    ?
+                    <DeleteTweetModal tweetId={this.state.currentTweet._id}
                       deleteTweet={this.props.deleteTweet} />
                     : null
                 }
                 <div>
-                  <img src={this.state.currentTweet.author.image} alt="current-profile" />
-                  <span style={{ fontWeight: "bold", fontSize: "20px", margin: "8px" }}>
-                    {this.state.currentTweet.author.name}
-                  </span>
+                  <Link to={`/profile/${this.state.currentTweet.author.name}`}
+                    style={{ fontWeight: "bold", 
+                    color: "white", textDecoration: "none" }}>
+                    <img src={this.state.currentTweet.author.image} alt="current-profile" />
+                    <span style={{ fontSize: "20px", margin: "8px" }}>
+                      {this.state.currentTweet.author.name}
+                    </span>
+                  </Link>
                 </div>
                 <div className="tweet-main">
                   <p>{this.state.currentTweet.content}</p>
@@ -225,4 +230,4 @@ const mapStateToProps = state => ({
 
 
 export default connect(mapStateToProps,
-   { checkLogin, logoutUser, removeTweet, addLiked, removeLiked })(Tweet);
+  { checkLogin, logoutUser, removeTweet, addLiked, removeLiked })(Tweet);

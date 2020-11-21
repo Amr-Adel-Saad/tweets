@@ -3,8 +3,10 @@ $back-blue: rgb(21, 32, 43);
 $hover-blue: rgb(21, 48, 71);
 $light-hover: rgb(0, 128, 255);
 $heart: #E74C3C;
+$grid-columns: 19 !default;
 
 @import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+@import "node_modules/bootstrap/scss/bootstrap";
 
 @import 'credentials';
 @import 'navigation';
@@ -14,14 +16,6 @@ $heart: #E74C3C;
 
 html {
   overflow-y: scroll;
-}
-
-.col-5-5 {
-  width: 47%;
-}
-
-.col-2-5 {
-  width: 22%;
 }
 
 body {
@@ -113,25 +107,27 @@ a, button {
     }
 
     .liked {
-      color: $heart;
+      color: $heart !important;
       margin-right: 6px;
-    }
-    
-    .liked:hover {
-      color: darkgray;
     }
     
     .like {
-      color: darkgray;
+      color: darkgray !important;
       margin-right: 6px;
     }
-    
-    .like:hover {
-      color: $heart;
+
+    @media (hover: hover) {
+      .liked:hover {
+        color: darkgray;
+      }
+
+      .like:hover {
+        color: $heart;
+      }
     }
   }
 
-  a {
+  .tweet-background {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -145,8 +141,10 @@ a, button {
   }
 }
 
-.tweet-container:hover {
-  background-color: rgba(21, 48, 71, 0.4);
+@media (hover: hover) {
+  .tweet-container:hover {
+    background-color: rgba(21, 48, 71, 0.4);
+  }
 }
 
 .reply-container {
@@ -162,7 +160,7 @@ a, button {
 .back-button-div {
   position: sticky;
   background-color: $back-blue;
-  z-index: 2;
+  z-index: 3;
   top: 0;
   height: 55px;
   display: flex;
@@ -319,7 +317,7 @@ a, button {
 #current-tweet {
   position: relative;
   min-height: 100vh;
-  margin-left: 22%;
+  margin-left: 19.6%;
   border-right: 1px solid rgba(255, 255, 255, .25);
   display: flex;
   flex-direction: column;
@@ -409,7 +407,6 @@ aside {
   position: fixed;
   left: 0; 
   right: 0;
-  top: 90%;
   bottom: 10%;
   margin: auto;
   width: 160px;
@@ -431,4 +428,40 @@ aside {
   align-items: center;
   text-align: center;
   height: 100vh;
+}
+
+@media (max-width: 1199.98px) {
+  #current-tweet {
+    margin-left: 9%;
+  }
+}
+
+@media (max-width: 991.98px) {
+  aside {
+    display: none;
+  }
+
+  #current-tweet {
+    margin-left: 1%;
+  }
+}
+
+@media (max-width: 767.98px) {
+  #current-tweet {
+    margin-left: 5.4%;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .row {
+    padding-bottom: 11vh !important;
+  }
+
+  .flash-tweet {
+    bottom: 15%;
+  }
+
+  #current-tweet {
+    margin-left: 0;
+  }
 }

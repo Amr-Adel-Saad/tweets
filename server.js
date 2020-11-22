@@ -3,7 +3,7 @@ require('dotenv').config({ path: __dirname + '/.env' });
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const path = require('path');
+const path = require('path');   
 
 // mongoose fix deprecation warnings
 mongoose.set('useNewUrlParser', true);
@@ -33,8 +33,6 @@ const db = process.env.MONGO_URI;
 mongoose.connect(db)
     .then(() => console.log('MongoDB Connected...'))
     .catch(err => console.log(err));
-
-
 
 if (process.env.NODE_ENV === 'production') {
     // Exprees will serve up production assets

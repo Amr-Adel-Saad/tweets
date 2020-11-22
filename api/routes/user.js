@@ -166,7 +166,7 @@ router.get('/userfeed', checkAuth, (req, res) => {
 			const following = user.following;
 
 			const followingPromises = following.map(name => {
-				return axios.get(`http://localhost:5000/api/user/profile/${name}`);
+				return axios.get(`https://tweets-amr.herokuapp.com/api/user/profile/${name}`);
 			});
 
 			Promise.all(followingPromises)

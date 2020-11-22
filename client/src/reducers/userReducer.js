@@ -52,7 +52,7 @@ export default function (state = initialState, action) {
         ...state,
         userData: {
           ...state.userData,
-          likes: [...state.userData.likes, action.payload]
+          likes: [action.payload, ...state.userData.likes]
         }
       };
     case REMOVE_LIKED:

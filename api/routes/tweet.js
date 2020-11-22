@@ -90,7 +90,12 @@ router.patch('/:tweetId', checkAuth, (req, res) => {
       }).exec()
       .then(() => {
         User.updateOne({ _id: req.userData.userId }, {
-          $addToSet: { 'likes': req.params.tweetId },
+          $push: {
+            'likes': {
+              $each: [req.params.tweetId],
+              $position: 0
+            }
+          },
         }).exec()
           .then(() => {
             res.status(200).json({ message: 'Tweet liked' });

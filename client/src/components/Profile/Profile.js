@@ -151,8 +151,7 @@ class Profile extends Component {
 									</div>
 								</div>
 								<div id="img-container">
-									<img src={'http://localhost:5000' + this.state.currentProfile.image}
-										alt="profile" />
+									<img src={this.state.currentProfile.image} alt="profile" />
 									<p>{this.state.currentProfile.name}</p>
 									{
 										(this.state.currentProfile.followers.length === 1)

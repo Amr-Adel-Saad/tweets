@@ -142,7 +142,7 @@ class Likes extends Component {
                     <p>{tweet.content}</p>
                     <Like tweet={tweet} handleLike={this.handleLike} />
                   </div>
-                  <Link to={`/profile/${tweet.author.name}/status/${tweet._id}`}>
+                  <Link className="tweet-background" to={`/profile/${tweet.author.name}/status/${tweet._id}`}>
                     <span></span>
                   </Link>
                 </article>

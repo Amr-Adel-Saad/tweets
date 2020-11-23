@@ -19,7 +19,8 @@ class Profile extends Component {
 		super();
 		this.state = {
 			currentProfile: '',
-			isLoading: true
+			isLoading: true,
+			imageUploading: false
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -70,6 +71,7 @@ class Profile extends Component {
 
 	handleSubmit(e) {
 		e.preventDefault();
+		this.setState({ imageUploading: true });
 
 		const formData = new FormData();
 		formData.append('userImage', e.target.userImage.files[0]);
@@ -86,8 +88,12 @@ class Profile extends Component {
 		})
 			.then(res => {
 				this.props.updateUserImage(res.data.image);
+				this.setState({ imageUploading: false });
 			})
-			.catch(err => console.log(err));
+			.catch(err => {
+				this.setState({ imageUploading: false });
+				console.log(err);
+			});
 	}
 
 	handleFollow(e) {
@@ -151,7 +157,15 @@ class Profile extends Component {
 									</div>
 								</div>
 								<div id="img-container">
-									<img src={this.state.currentProfile.image} alt="profile" />
+									<div style={{ position: "relative" }}>
+										<img src={this.state.currentProfile.image} alt="profile" />
+										{
+											(this.state.imageUploading)
+											?
+											<Spinner className="loading" type="grow" color="light"/>
+											: null
+										}
+									</div>
 									<p>{this.state.currentProfile.name}</p>
 									{
 										(this.state.currentProfile.followers.length === 1)

@@ -11,7 +11,7 @@ import { logoutUser } from '../actions/userActions';
 
 const Navigation = (props) => {
   return (
-    <Navbar className="col-xl-4 col-lg-2 col-md-2 col-sm-3 col-19" id="main-navbar">
+    <Navbar className="col-xl-5 col-lg-2 col-sm-3 col-24" id="main-navbar">
       <NavbarBrand tag={Link} to="/home">
         <i className="fa fa-fw fa-twitter"></i>
       </NavbarBrand>

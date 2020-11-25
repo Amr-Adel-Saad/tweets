@@ -1,23 +1,25 @@
 #main-navbar {
-  position: fixed;
-  height: 100%;
+  position: sticky;
+  top: 0;
+  height: 100vh;
   font-weight: bold;
   border-right: 1px solid rgba(255,255,255,.25);
   padding-top: 10px;
   padding-right: 8px;
   padding-left: 8px;
-  left: 10px;
   background-color: $back-blue;
+  overflow: hidden;
 
   .selected {
     color: $main-blue !important;
   }
 
   .navbar-brand {
+    width: 100% !important;
     margin-left: 20px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     padding: auto 20px;
     color: white;
     border-radius: 50%;
@@ -100,16 +102,15 @@
   }
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1199.98px) {
   #main-navbar {
-    left: 3%;
-
     span {
       display: none;
     }
 
     .navbar-brand {
-      margin: auto;  
+      margin: auto;
+      justify-content: center;
     }
 
     .nav {
@@ -146,29 +147,22 @@
   }
 }
 
-@media (max-width: 991.98px) {
+@media (max-width: 575.98px), (max-height: 560px) {
   #main-navbar {
-    left: 11%;
-  }
-}
-
-@media (max-width: 767.98px) {
-  #main-navbar {
-    left: 0;
-  }
-}
-
-@media (max-width: 575.98px), (max-height: 500px) {
-  #main-navbar {
-    left: 0;
+    position: fixed;
     border-top: 1px solid rgba(255,255,255,.25);
-    height: 11vh;
-    bottom: 0;
+    height: 10vh;
+    top: 90vh;
+    left: 0;
     z-index: 20 !important;
     padding-top: 0;
     padding-bottom: 0;
 
     .navbar-brand {
+      display: none;
+    }
+
+    span {
       display: none;
     }
 
@@ -189,12 +183,16 @@
       font-size: 24px;
     }
 
+    .nav-link:focus {
+      background-color: transparent;
+    }
+
     #tweet-button {
       width: 58px;
       height: 58px;
       margin: 0;
       position: fixed;
-      right: 18px;
+      right: 20px;
       bottom: 100px;
       box-shadow: rgba(136, 153, 166, 0.2) 0px 0px 10px !important;
     }
@@ -216,17 +214,8 @@
   }
 }
 
-@media (max-width: 250px) {
+@media (max-height: 560px) {
   #main-navbar {
-    #tweet-button {
-      width: 45px;
-      height: 45px;
-    }
-  }
-}
-
-@media (max-height: 500px) {
-  #main-navbar {
-    min-width: 100% !important
+    min-width: 100% !important;
   }
 }

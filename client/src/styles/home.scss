@@ -1,7 +1,6 @@
 #home {
   position: relative;
   min-height: 100vh;
-  margin-left: 19.6%;
   border-right: 1px solid rgba(255,255,255,.25);
   display: flex;
   flex-direction: column;
@@ -59,38 +58,17 @@
   }
 }
 
-@media (max-width: 1199.98px) {
-  #home {
-    margin-left: 9%;
-  }
-}
-
-@media (max-width: 991.98px) {
-  #home {
-    margin-left: 1%;
-  }
-}
-
-@media (max-width: 767.98px) {
-  #home {
-    margin-left: 5.4%;
-  }
-}
-
 @media (max-width: 575.98px) {
   #home {
-    margin-left: 0;
-
     #new-tweet {
       display: none;
     }
   }
 }
 
-@media (max-height: 500px) {
+@media (max-height: 560px) {
   #home {
-    min-width: 60%;
-    margin-left: 0;
+    min-width: 65%;
     border-left: 1px solid rgba(255,255,255,.25);
   }
 }

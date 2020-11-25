@@ -21,7 +21,7 @@ const UserSchema = new Schema({
 	},
 	image: {
 		type: String,
-		default: '/uploads/default.png'
+		default: 'https://res.cloudinary.com/amr-cloud/image/upload/v1606282532/uploads/default_ycg4dm.jpg'
 	},
 	tweets: [{
 		type: Schema.Types.ObjectId,

@@ -110,7 +110,7 @@ class Explore extends Component {
 
   render() {
     return (
-      <main id="explore" className="p-0 col-xl-9 col-lg-10 col-md-11 col-sm-14 col-19">
+      <main id="explore" className="p-0 col-xl-12 col-lg-14 col-sm-21 col-24">
         <div style={{ height: "65px" }} className="back-button-div">
           <Button onClick={this.props.goBack} className="back-button">
             <i className="fas fa-md fa-arrow-left"></i>

@@ -125,7 +125,7 @@ class Main extends Component {
       );
     } else {
       return (
-        <div className="row p-0 justify-content-center">
+        <div className="row justify-content-between">
           <Navigation handleLogout={this.handleLogout} toggle={this.toggle}
             handleTweet={this.handleTweet} tweetModal={this.state.tweetModal} />
           <Switch>

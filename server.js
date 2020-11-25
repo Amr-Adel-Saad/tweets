@@ -19,9 +19,6 @@ app.use(cors());
 // Bodyparser middleware
 app.use(express.json());
 
-// Serve static assets
-app.use('/uploads', express.static('uploads'));
-
 // Routes
 app.use('/api/user', require('./api/routes/user'));
 app.use('/api/tweet', require('./api/routes/tweet'));

@@ -5,16 +5,26 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const axios = require('axios');
 
 // Configure upload destination
-const storage = multer.diskStorage({
-	destination: function (req, file, cb) {
-		cb(null, './uploads');
-	},
-	filename: function (req, file, cb) {
-		cb(null, new Date() + '-' + file.originalname);
-	}
+// const storage = multer.diskStorage({
+// 	destination: function (req, file, cb) {
+// 		cb(null, './uploads');
+// 	},
+// 	filename: function (req, file, cb) {
+// 		cb(null, new Date() + '-' + file.originalname);
+// 	}
+// });
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'uploads',
+    public_id: (req, file) => file.filename,
+  },
 });
 
 // Configure uploads mimetype
@@ -208,7 +218,7 @@ router.patch('/:userId', upload.single('userImage'), checkAuth, (req, res) => {
 		if (req.file) {
 			User.findOneAndUpdate(
 				{ _id: req.params.userId },
-				{ image: `/${req.file.path}` }, { new: true }).exec()
+				{ image: req.file.path }, { new: true }).exec()
 				.then(updated => res.status(200).json(updated))
 				.catch(err => res.status(500).json({ error: err }));
 		} else {

@@ -145,7 +145,7 @@ class Tweet extends Component {
 
   render() {
     return (
-      <main id="current-tweet" className="p-0 col-xl-9 col-lg-10 col-md-11 col-sm-14 col-19">
+      <main id="current-tweet" className="p-0 col-xl-12 col-lg-14 col-sm-21 col-24">
         { (this.state.isLoading)
           ? <Spinner className="loading" color="primary" />
           : (this.state.currentTweet === '')

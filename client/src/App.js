@@ -16,7 +16,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <ConnectedRouter history={history}>
-        <div className="container-fluid">
+        <div className="container">
           <Switch>
             <Route exact path="/" component={Index} />
             <Route path="/login" component={Login} />

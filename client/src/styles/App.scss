@@ -446,7 +446,18 @@ aside {
     padding-bottom: 10vh !important;
   }
 
+  #current-tweet {
+    border-left: 1px solid rgba(255,255,255,.25);
+  }
+
   .flash-tweet {
     bottom: 15%;
+  }
+}
+
+@media (max-height: 560px) {
+  #current-tweet {
+    min-width: 65%;
+    border-left: 1px solid rgba(255,255,255,.25);
   }
 }

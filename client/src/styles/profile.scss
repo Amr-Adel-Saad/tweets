@@ -239,6 +239,12 @@
   }
 }
 
+@media (max-width: 575.98px) {
+  #Profile {
+    border-left: 1px solid rgba(255,255,255,.25);
+  }
+}
+
 @media (max-height: 560px) {
   #Profile {
     min-width: 65%;

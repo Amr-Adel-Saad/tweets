@@ -71,7 +71,7 @@ class Signup extends Component {
 							</Alert>)
 						}
 						<FormGroup>
-							<Input type="text" name="name" onChange={this.handleChange} 
+							<Input type="text" maxLength="8" name="name" onChange={this.handleChange} 
 								value={this.state.name} placeholder="Username" autoFocus autoComplete="off"/>
 						</FormGroup>
 						<FormGroup>

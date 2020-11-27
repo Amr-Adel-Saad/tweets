@@ -5,6 +5,7 @@ import { Switch, Route } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
 import { Provider } from 'react-redux';
 
+import ScrollToTop from './ScrollToTop';
 import Index from './components/Index';
 import Login from './components/Login';
 import Signup from './components/Signup';
@@ -16,6 +17,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <ConnectedRouter history={history}>
+      <ScrollToTop />
         <div className="container">
           <Switch>
             <Route exact path="/" component={Index} />

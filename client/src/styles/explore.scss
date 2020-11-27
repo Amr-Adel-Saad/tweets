@@ -59,3 +59,9 @@
     border-left: 1px solid rgba(255,255,255,.25);
   }
 }
+
+@media (max-width: 575px) {
+  #explore {
+    border-left: none;
+  }
+}

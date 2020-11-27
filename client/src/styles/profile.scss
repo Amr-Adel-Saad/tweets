@@ -245,6 +245,7 @@
     
     .nav-link {
       font-size: 12px;
+      padding: 10px;
     }
   }
 }
@@ -253,5 +254,11 @@
   #profile {
     min-width: 65%;
     border-left: 1px solid rgba(255,255,255,.25);
+  }
+}
+
+@media (max-width: 575px) {
+  #profile {
+    border-left: none;
   }
 }

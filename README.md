@@ -21,7 +21,7 @@ User can:
 Major:
 
 - [Reactjs](https://reactjs.org/) as a frontend framework.
-- [expressjs](https://expressjs.com/) as a backend framework.
+- [Expressjs](https://expressjs.com/) as a backend framework.
 - [Mongodb](https://www.mongodb.com/) as a database.
 
 Others:

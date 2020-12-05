@@ -20,9 +20,9 @@ User can:
 
 Major:
 
-- [Reactjs](https://reactjs.org/) as a frontend framework.
-- [Expressjs](https://expressjs.com/) as a backend framework.
-- [Mongodb](https://www.mongodb.com/) as a database.
+- [ReactJS](https://reactjs.org/) as a frontend framework.
+- [ExpressJS](https://expressjs.com/) as a backend framework.
+- [MongoDB](https://www.mongodb.com/) as a database.
 
 Others:
 

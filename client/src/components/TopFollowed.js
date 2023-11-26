@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Spinner, Button } from 'reactstrap';
+import { Spinner } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import axios from 'axios';
@@ -61,6 +61,7 @@ class TopFollowed extends Component {
   }
 
   render() {
+    console.log(this.props.user.userData.following);
     return (
       <aside className="col-xl-7 col-lg-8">
         <section id="top-followed">
@@ -78,7 +79,7 @@ class TopFollowed extends Component {
                         <img src={profile.image} alt={profile.name} />
                         <span> {profile.name}</span>
                       </div>
-                      { (this.props.user.userData.name === profile.name)
+                      {/* { (this.props.user.userData.name === profile.name)
                         ? null
                         : (this.props.user.userData.following.includes(profile.name))
                           ? <Button
@@ -92,7 +93,7 @@ class TopFollowed extends Component {
                             onClick={e => this.handleFollow(profile, e)}
                             className="follow btn-lg">
                             Follow</Button>
-                      }
+                      } */}
                       <Link to={`/profile/${profile.name}`}>
                         <span></span>
                       </Link>

@@ -2,7 +2,7 @@
 
 A Twitter clone created using the MERN stack.
 
-[Live Demo](https://tweets.onrender.com/)
+[Live Demo](https://amr-tweets.herokuapp.com/)
 
 ## Features
 

@@ -4,7 +4,7 @@
   "description": "tweets",
   "main": "server.js",
   "engines": {
-    "node": "12.x"
+    "node": "16.20.1"
   },
   "scripts": {
     "client-install": "npm install --prefix client",
